@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Матрица: Выбор</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -39,9 +39,9 @@
         }
         
         .pill {
-            width: 80px;
-            height: 160px;
-            border-radius: 40px;
+            width: 60px;
+            height: 120px;
+            border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
@@ -148,9 +148,23 @@
             background: transparent;
             border: 1px solid #00ff41;
             color: #00ff41;
-            padding: 10px;
+            padding: 8px;
             outline: none;
             transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 640px) {
+            .matrix-btn {
+                padding: 10px;
+                font-size: 14px;
+            }
+            .registration-form h2 {
+                font-size: 1.5rem;
+            }
+            .flex-col.md\:flex-row {
+                gap: 1rem;
+            }
         }
         
         .matrix-input:focus {
@@ -218,7 +232,7 @@
     <div class="container mx-auto px-4 h-screen flex flex-col justify-center items-center">
         <!-- Главный экран выбора -->
         <div id="main-screen" class="text-center">
-            <h1 class="text-4xl md:text-6xl font-bold mb-8 glitch flicker" data-text="ТЫ ГОТОВ ИЗМЕНИТЬ СВОЮ ЖИЗНЬ?">ТЫ ГОТОВ ИЗМЕНИТЬ СВОЮ ЖИЗНЬ?</h1>
+            <h1 class="text-2xl md:text-6xl font-bold mb-6 md:mb-8 glitch flicker" data-text="ТЫ ГОТОВ ИЗМЕНИТЬ СВОЮ ЖИЗНЬ?">ТЫ ГОТОВ ИЗМЕНИТЬ СВОЮ ЖИЗНЬ?</h1>
             
             <div class="flex flex-col md:flex-row justify-center items-center gap-12 mb-12">
                 <div class="flex flex-col items-center">
@@ -309,7 +323,7 @@
             const rainContainer = document.getElementById('rain');
             rainContainer.innerHTML = '';
             
-            const dropsCount = window.innerWidth < 768 ? 30 : 100;
+            const dropsCount = window.innerWidth < 768 ? 20 : 100;
             
             for (let i = 0; i < dropsCount; i++) {
                 const drop = document.createElement('div');
