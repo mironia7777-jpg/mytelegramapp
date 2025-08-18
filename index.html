@@ -2,628 +2,1285 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Матрица: Выбор</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создай свою реальность</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
         
         body {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
+            overflow-x: hidden;
+            color: #00ff41;
             background-color: #000;
-            color: #00ff41;
-            overflow: hidden;
-            height: 100vh;
-            margin: 0;
         }
         
-        .matrix-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8) 1px, transparent 1px, transparent 2px);
-            z-index: -1;
+        .matrix-text {
+            text-shadow: 0 0 5px #00ff41;
         }
         
-        .matrix-code {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(0, 255, 65, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
-            z-index: -1;
-            opacity: 0.3;
-        }
-        
-        .pill {
-            width: 60px;
-            height: 120px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
-        }
-        
-        .pill:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px rgba(0, 255, 65, 0.8);
-        }
-        
-        .pill::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.3) 50%, transparent 60%);
-            background-size: 200% 200%;
-            animation: shine 2s infinite;
-        }
-        
-        @keyframes shine {
-            0% {
-                background-position: 100% 100%;
-            }
-            100% {
-                background-position: 0% 0%;
-            }
-        }
-        
-        .red-pill {
-            background: linear-gradient(to bottom, #ff0033, #800020);
-        }
-        
-        .blue-pill {
-            background: linear-gradient(to bottom, #0066ff, #003380);
-        }
-        
-        .registration-form {
-            transform: scale(0);
-            opacity: 0;
-            transition: all 0.5s ease;
-            background: rgba(0, 0, 0, 0.9);
+        .matrix-border {
             border: 1px solid #00ff41;
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.7);
-        }
-        
-        .registration-form.active {
-            transform: scale(1);
-            opacity: 1;
-        }
-        
-        .glitch {
-            position: relative;
-        }
-        
-        .glitch::before, .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.8;
-        }
-        
-        .glitch::before {
-            color: #0ff;
-            z-index: -1;
-            animation: glitch-effect 3s infinite;
-        }
-        
-        .glitch::after {
-            color: #f0f;
-            z-index: -2;
-            animation: glitch-effect 2s infinite reverse;
-        }
-        
-        @keyframes glitch-effect {
-            0% {
-                transform: translate(0);
-            }
-            20% {
-                transform: translate(-3px, 3px);
-            }
-            40% {
-                transform: translate(-3px, -3px);
-            }
-            60% {
-                transform: translate(3px, 3px);
-            }
-            80% {
-                transform: translate(3px, -3px);
-            }
-            100% {
-                transform: translate(0);
-            }
-        }
-        
-        .matrix-input {
-            background: transparent;
-            border: 1px solid #00ff41;
-            color: #00ff41;
-            padding: 8px;
-            outline: none;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-        
-        @media (max-width: 640px) {
-            .matrix-btn {
-                padding: 10px;
-                font-size: 14px;
-            }
-            .registration-form h2 {
-                font-size: 1.5rem;
-            }
-            .flex-col.md\:flex-row {
-                gap: 1rem;
-            }
-        }
-        
-        .matrix-input:focus {
-            box-shadow: 0 0 10px rgba(0, 255, 65, 0.7);
-        }
-        
-        .matrix-btn {
-            background: linear-gradient(to right, #00a800, #00ff41);
-            color: black;
-            font-weight: bold;
-            border: none;
-            transition: all 0.3s;
-        }
-        
-        .matrix-btn:hover {
-            background: linear-gradient(to right, #00ff41, #00a800);
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.7);
-        }
-        
-        .flicker {
-            animation: flicker 5s infinite alternate;
-        }
-        
-        @keyframes flicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-                opacity: 1;
-            }
-            20%, 22%, 24%, 55% {
-                opacity: 0.5;
-            }
+            box-shadow: 0 0 10px #00ff41;
         }
         
         .rain {
             position: absolute;
             width: 100%;
             height: 100%;
-            top: 0;
-            left: 0;
-            z-index: -1;
+            pointer-events: none;
+            z-index: 1;
         }
         
         .drop {
             position: absolute;
             width: 1px;
-            height: 30px;
-            background: linear-gradient(to bottom, transparent, #00ff41);
-            animation: rain 1s linear infinite;
+            background: #00ff41;
+            animation: fall linear infinite;
         }
         
-        @keyframes rain {
-            0% {
-                transform: translateY(-100vh);
-            }
-            100% {
+        @keyframes fall {
+            to {
                 transform: translateY(100vh);
             }
         }
+        
+        .btn-matrix {
+            background: transparent;
+            color: #00ff41;
+            border: 1px solid #00ff41;
+            padding: 15px 30px;
+            font-size: 18px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .btn-matrix:hover {
+            box-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
+            text-shadow: 0 0 5px #00ff41;
+        }
+        
+        .btn-matrix::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.4), transparent);
+            transition: all 0.5s;
+        }
+        
+        .btn-matrix:hover::before {
+            left: 100%;
+        }
+        
+        .sphere-btn {
+            transition: all 0.3s;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .sphere-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px #00ff41;
+        }
+        
+        .character-container {
+            width: 300px;
+            height: 400px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .progress-level {
+            height: 20px;
+            background: #111;
+            border: 1px solid #00ff41;
+            position: relative;
+        }
+        
+        .progress-level::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: #00ff41;
+            width: var(--progress);
+        }
+        
+        .habit-tracker .habit-item {
+            border-bottom: 1px dashed #00ff41;
+            padding: 10px 0;
+        }
+        
+        .habit-tracker .habit-checkbox {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #00ff41;
+            background: transparent;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .habit-tracker .habit-checkbox:checked::before {
+            content: '✓';
+            position: absolute;
+            color: #00ff41;
+            font-size: 16px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .task-item.completed {
+            text-decoration: line-through;
+            color: #666;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .modal-content {
+            background-color: #000;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #00ff41;
+            width: 80%;
+            max-width: 800px;
+            position: relative;
+        }
+        
+        .close {
+            color: #00ff41;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #fff;
+        }
+        
+        #vanta-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
     </style>
 </head>
-<body class="relative">
-    <div class="matrix-bg"></div>
-    <div class="matrix-code"></div>
-    <div class="rain" id="rain"></div>
+<body>
+    <div id="vanta-canvas"></div>
+    <div id="rain" class="rain"></div>
     
-    <div class="container mx-auto px-4 h-screen flex flex-col justify-center items-center">
-        <!-- Главный экран выбора -->
-        <div id="main-screen" class="text-center">
-            <h1 class="text-2xl md:text-6xl font-bold mb-6 md:mb-8 glitch flicker" data-text="ТЫ ГОТОВ ИЗМЕНИТЬ СВОЮ ЖИЗНЬ?">ТЫ ГОТОВ ИЗМЕНИТЬ СВОЮ ЖИЗНЬ?</h1>
+    <!-- Главная страница -->
+    <div id="main-page" class="min-h-screen flex flex-col items-center justify-center p-4">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 matrix-text">ПРИШЛО ВРЕМЯ СОЗДАТЬ СВОЮ ЛУЧШУЮ РЕАЛЬНОСТЬ</h1>
+            <p class="text-xl md:text-2xl mb-8 matrix-text">Начни свой путь к идеальной жизни прямо сейчас</p>
+        </div>
+        
+        <button id="login-btn" class="btn-matrix mb-8 animate-pulse">
+            ВОЙТИ
+        </button>
+        
+        <button id="dev-login-btn" class="text-xs text-gray-400 hover:text-gray-200">
+            Вход для разработчика
+        </button>
+    </div>
+    
+    <!-- Модальное окно входа -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 class="text-2xl mb-6 text-center matrix-text">ВХОД В СИСТЕМУ</h2>
             
-            <div class="flex flex-col md:flex-row justify-center items-center gap-12 mb-12">
-                <div class="flex flex-col items-center">
-                    <div class="pill blue-pill mb-4" onclick="choosePill('blue')"></div>
-                    <p class="text-xl">Остаться в иллюзии</p>
+            <div class="mb-4">
+                <label class="block mb-2">Никнейм:</label>
+                <input type="text" id="login-username" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
+            </div>
+            
+            <div class="mb-6">
+                <label class="block mb-2">Пароль:</label>
+                <input type="password" id="login-password" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
+            </div>
+            
+            <button id="submit-login" class="btn-matrix w-full mb-4">ВОЙТИ</button>
+            
+            <p class="text-center mb-2">Нет аккаунта?</p>
+            <button id="show-register" class="text-green-400 hover:text-white w-full text-center">Зарегистрироваться</button>
+        </div>
+    </div>
+    
+    <!-- Модальное окно регистрации -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 class="text-2xl mb-6 text-center matrix-text">РЕГИСТРАЦИЯ</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block mb-2">Никнейм:</label>
+                    <input type="text" id="reg-username" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
                 </div>
-                <div class="flex flex-col items-center">
-                    <div class="pill red-pill mb-4" onclick="choosePill('red')"></div>
-                    <p class="text-xl">Узнать правду</p>
+                
+                <div>
+                    <label class="block mb-2">Пароль:</label>
+                    <input type="password" id="reg-password" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
                 </div>
             </div>
             
-            <p class="text-lg md:text-xl mb-4">Выбор за тобой. Но помни: после выбора пути назад не будет.</p>
-            <button onclick="showLoginForm()" class="text-sm md:text-base py-2 px-4 rounded font-bold matrix-btn">
-                УЖЕ В МАТРИЦЕ? ВОЙТИ
-            </button>
-            <button onclick="showDevLoginForm()" class="text-xs md:text-sm py-1 px-2 rounded font-bold mt-2" style="background: #333; color: #00ff41; border: 1px solid #00ff41;">
-                ДЛЯ РАЗРАБОТЧИКОВ
-            </button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block mb-2">Имя:</label>
+                    <input type="text" id="reg-name" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
+                </div>
+                
+                <div>
+                    <label class="block mb-2">Возраст:</label>
+                    <input type="number" id="reg-age" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block mb-2">Пол:</label>
+                <div class="flex space-x-4">
+                    <label class="flex items-center">
+                        <input type="radio" name="gender" value="male" class="mr-2" checked>
+                        Мужской
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="gender" value="female" class="mr-2">
+                        Женский
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="gender" value="other" class="mr-2">
+                        Другой
+                    </label>
+                </div>
+            </div>
+            
+            <button id="submit-register" class="btn-matrix w-full mb-4">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+            
+            <p class="text-center mb-2">Уже есть аккаунт?</p>
+            <button id="show-login" class="text-green-400 hover:text-white w-full text-center">Войти</button>
+        </div>
+    </div>
+    
+    <!-- Модальное окно разработчика -->
+    <div id="dev-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 class="text-2xl mb-6 text-center matrix-text">ВХОД ДЛЯ РАЗРАБОТЧИКА</h2>
+            
+            <div class="mb-6">
+                <label class="block mb-2">Пароль:</label>
+                <input type="password" id="dev-password" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
+            </div>
+            
+            <button id="submit-dev" class="btn-matrix w-full mb-4">ПОДТВЕРДИТЬ</button>
+        </div>
+    </div>
+    
+    <!-- База данных пользователей (видна только разработчику) -->
+    <div id="user-database" class="hidden min-h-screen p-8">
+        <h2 class="text-3xl mb-8 text-center matrix-text">БАЗА ДАННЫХ ПОЛЬЗОВАТЕЛЕЙ</h2>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full border-collapse border border-green-400">
+                <thead>
+                    <tr class="border-b border-green-400">
+                        <th class="p-3 text-left">ID</th>
+                        <th class="p-3 text-left">Никнейм</th>
+                        <th class="p-3 text-left">Имя</th>
+                        <th class="p-3 text-left">Возраст</th>
+                        <th class="p-3 text-left">Пол</th>
+                        <th class="p-3 text-left">Пароль</th>
+                        <th class="p-3 text-left">Уровень</th>
+                        <th class="p-3 text-left">Очки</th>
+                    </tr>
+                </thead>
+                <tbody id="user-table-body">
+                    <!-- Данные будут добавлены через JS -->
+                </tbody>
+            </table>
         </div>
         
-        <!-- Форма входа для разработчиков -->
-        <div id="dev-login-form" class="registration-form p-8 rounded-lg w-full max-w-md hidden">
-            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center">ДОСТУП РАЗРАБОТЧИКА</h2>
-            
-            <form id="dev-login-form-data" class="space-y-4">
-                <div>
-                    <label for="dev-password" class="block mb-2">Пароль:</label>
-                    <input type="password" id="dev-password" name="password" required 
-                           class="w-full matrix-input rounded" 
-                           placeholder="••••••••">
-                </div>
-                
-                <div class="pt-4">
-                    <button type="submit" class="w-full py-3 px-4 rounded font-bold matrix-btn">
-                        ДОСТУП К БАЗЕ
-                    </button>
-                </div>
-            </form>
+        <button id="back-to-main" class="btn-matrix mt-8">НАЗАД</button>
+    </div>
+    
+    <!-- Личный кабинет пользователя -->
+    <div id="user-dashboard" class="hidden min-h-screen p-4 md:p-8">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl md:text-3xl matrix-text">МОЯ РЕАЛЬНОСТЬ</h2>
+            <div class="flex items-center space-x-4">
+                <span id="user-level" class="text-xl">Уровень: 1</span>
+                <span id="user-points" class="text-xl">Очки: 0</span>
+                <button id="profile-btn" class="btn-matrix px-4 py-2">Мой профиль</button>
+                <button id="logout-btn" class="btn-matrix px-4 py-2">Выйти</button>
+            </div>
         </div>
-
-        <!-- Форма входа -->
-        <div id="login-form" class="registration-form p-8 rounded-lg w-full max-w-md hidden">
-            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center">ВХОД В МАТРИЦУ</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <!-- Мотивация дня -->
+            <div class="matrix-border p-6">
+                <h3 class="text-xl mb-4 matrix-text">МОТИВАЦИЯ ДНЯ</h3>
+                <p id="daily-motivation" class="mb-4">Сегодня твой день! Сделай хотя бы один шаг к своей мечте, и ты будешь на шаг ближе к цели.</p>
+                <button id="new-motivation" class="btn-matrix px-4 py-2 text-sm">Новая мотивация</button>
+            </div>
             
-            <form id="login-form-data" class="space-y-4">
-                <div>
-                    <label for="login-username" class="block mb-2">Ваш ник:</label>
-                    <input type="text" id="login-username" name="username" required 
-                           class="w-full matrix-input rounded" 
-                           placeholder="Нео">
+            <!-- Календарь -->
+            <div class="matrix-border p-6">
+                <h3 class="text-xl mb-4 matrix-text">КАЛЕНДАРЬ</h3>
+                <div id="calendar" class="mb-4">
+                    <!-- Календарь будет добавлен через JS -->
                 </div>
-                
-                <div>
-                    <label for="login-password" class="block mb-2">Пароль:</label>
-                    <input type="password" id="login-password" name="password" required 
-                           class="w-full matrix-input rounded" 
-                           placeholder="••••••••">
-                </div>
-                
-                <div class="pt-4">
-                    <button type="submit" class="w-full py-3 px-4 rounded font-bold matrix-btn">
-                        ВОЙТИ В СИСТЕМУ
-                    </button>
-                </div>
-            </form>
+                <button id="add-event" class="btn-matrix px-4 py-2 text-sm">Добавить событие</button>
+            </div>
+            
+            <!-- Прогресс -->
+            <div class="matrix-border p-6">
+                <h3 class="text-xl mb-4 matrix-text">МОЙ ПРОГРЕСС</h3>
+                <div class="progress-level mb-2" style="--progress: 10%"></div>
+                <p>Заполненность профиля: 10%</p>
+            </div>
         </div>
-
-        <!-- Форма регистрации -->
-        <div id="registration-form" class="registration-form p-8 rounded-lg w-full max-w-md hidden">
-            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center">РЕГИСТРАЦИЯ В МАТРИЦЕ</h2>
+        
+        <!-- Сферы жизни -->
+        <h3 class="text-2xl mb-6 matrix-text">СФЕРЫ ЖИЗНИ</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+            <!-- Сферы будут добавлены через JS -->
+        </div>
+        
+        <!-- Дневник и трекер привычек -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <!-- Дневник -->
+            <div class="matrix-border p-6">
+                <h3 class="text-xl mb-4 matrix-text">ДНЕВНИК</h3>
+                <textarea id="diary-entry" class="w-full h-40 p-3 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400 mb-4" placeholder="Опиши свой день..."></textarea>
+                <button id="save-diary" class="btn-matrix px-4 py-2">СОХРАНИТЬ</button>
+            </div>
             
-            <form id="register-form" class="space-y-4">
-                <div>
-                    <label for="username" class="block mb-2">Уникальный ник:</label>
-                    <input type="text" id="username" name="username" required 
-                           class="w-full matrix-input rounded" 
-                           placeholder="Нео">
+            <!-- Трекер привычек -->
+            <div class="matrix-border p-6">
+                <h3 class="text-xl mb-4 matrix-text">ТРЕКЕР ПРИВЫЧЕК</h3>
+                <div class="habit-tracker mb-4">
+                    <!-- Привычки будут добавлены через JS -->
+                </div>
+                <button id="add-habit" class="btn-matrix px-4 py-2 text-sm mr-2">+ Привычка</button>
+                <button id="add-task" class="btn-matrix px-4 py-2 text-sm">+ Задача</button>
+            </div>
+        </div>
+        
+        <!-- Точка А и точка Б -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div class="matrix-border p-6">
+                <h3 class="text-xl mb-4 matrix-text">ТОЧКА А</h3>
+                <p class="mb-4">Где я сейчас?</p>
+                <textarea id="point-a" class="w-full h-40 p-3 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400 mb-4" placeholder="Опиши свою текущую реальность..."></textarea>
+                <button id="save-point-a" class="btn-matrix px-4 py-2">СОХРАНИТЬ</button>
+            </div>
+            
+            <div class="matrix-border p-6">
+                <h3 class="text-xl mb-4 matrix-text">ТОЧКА Б</h3>
+                <p class="mb-4">Куда я иду?</p>
+                <textarea id="point-b" class="w-full h-40 p-3 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400 mb-4" placeholder="Опиши свою желаемую реальность..."></textarea>
+                <button id="save-point-b" class="btn-matrix px-4 py-2">СОХРАНИТЬ</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Профиль пользователя с 3D персонажем -->
+    <div id="user-profile" class="hidden min-h-screen p-8">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-3xl matrix-text">МОЙ ПРОФИЛЬ</h2>
+            <button id="back-to-dashboard" class="btn-matrix px-4 py-2">НАЗАД</button>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="matrix-border p-6">
+                <h3 class="text-xl mb-4 matrix-text">ИНФОРМАЦИЯ</h3>
+                
+                <div class="mb-4">
+                    <label class="block mb-2">Имя:</label>
+                    <input type="text" id="profile-name" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
                 </div>
                 
-                <div>
-                    <label for="age" class="block mb-2">Возраст:</label>
-                    <input type="number" id="age" name="age" min="13" max="100" required 
-                           class="w-full matrix-input rounded">
+                <div class="mb-4">
+                    <label class="block mb-2">Возраст:</label>
+                    <input type="number" id="profile-age" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
                 </div>
                 
-                <div>
+                <div class="mb-6">
                     <label class="block mb-2">Пол:</label>
                     <div class="flex space-x-4">
                         <label class="flex items-center">
-                            <input type="radio" name="gender" value="male" class="matrix-input" checked>
-                            <span class="ml-2">Мужской</span>
+                            <input type="radio" name="profile-gender" value="male" class="mr-2">
+                            Мужской
                         </label>
                         <label class="flex items-center">
-                            <input type="radio" name="gender" value="female" class="matrix-input">
-                            <span class="ml-2">Женский</span>
+                            <input type="radio" name="profile-gender" value="female" class="mr-2">
+                            Женский
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="profile-gender" value="other" class="mr-2">
+                            Другой
                         </label>
                     </div>
                 </div>
                 
-                <div>
-                    <label for="password" class="block mb-2">Пароль:</label>
-                    <input type="password" id="password" name="password" required 
-                           class="w-full matrix-input rounded" 
-                           placeholder="••••••••">
+                <button id="save-profile" class="btn-matrix w-full">СОХРАНИТЬ</button>
+            </div>
+            
+            <div class="flex flex-col items-center justify-center">
+                <div class="character-container mb-6" id="character-container">
+                    <!-- 3D персонаж будет здесь -->
+                </div>
+                <div class="text-center">
+                    <h3 id="character-name" class="text-2xl mb-2 matrix-text">ИМЯ</h3>
+                    <p id="character-level" class="text-lg">Уровень: 1</p>
+                </div>
+            </div>
+            
+            <div class="matrix-border p-6">
+                <h3 class="text-xl mb-4 matrix-text">ДОСТИЖЕНИЯ</h3>
+                <div class="mb-4">
+                    <p class="mb-2">Заполненность профиля:</p>
+                    <div class="progress-level mb-2" style="--progress: 10%"></div>
                 </div>
                 
-                <div class="pt-4">
-                    <button type="submit" class="w-full py-3 px-4 rounded font-bold matrix-btn">
-                        ПРОДОЛЖИТЬ ПУТЬ
-                    </button>
+                <div class="mb-4">
+                    <p class="mb-2">Последние достижения:</p>
+                    <ul class="list-disc pl-5">
+                        <li>Регистрация в системе</li>
+                    </ul>
                 </div>
-            </form>
+                
+                <div>
+                    <p class="mb-2">Ближайшие цели:</p>
+                    <ul class="list-disc pl-5">
+                        <li>Заполнить профиль на 50%</li>
+                        <li>Добавить 3 привычки</li>
+                        <li>Определить Точку Б</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Страница сферы жизни -->
+    <div id="life-sphere" class="hidden min-h-screen p-8">
+        <div class="flex justify-between items-center mb-8">
+            <h2 id="sphere-title" class="text-3xl matrix-text">СФЕРА ЖИЗНИ</h2>
+            <button id="back-to-spheres" class="btn-matrix px-4 py-2">НАЗАД</button>
         </div>
         
-        <!-- Экран после регистрации -->
-        <div id="welcome-screen" class="text-center hidden">
-            <h1 class="text-4xl md:text-6xl font-bold mb-8 glitch" data-text="ДОБРО ПОЖАЛОВАТЬ В МАТРИЦУ" id="welcome-username">ДОБРО ПОЖАЛОВАТЬ В МАТРИЦУ</h1>
-            <p class="text-xl mb-6">Ты сделал свой выбор. Теперь ты часть системы.</p>
-            <p class="text-lg mb-8">Твои данные сохранены. Все твои действия теперь будут записываться.</p>
-            <button onclick="showUserData()" class="py-3 px-6 rounded font-bold matrix-btn">
-                ПОКАЗАТЬ МОИ ДАННЫЕ
-            </button>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div class="matrix-border p-6">
+                <h3 class="text-xl mb-4 matrix-text">ТЕКУЩЕЕ СОСТОЯНИЕ</h3>
+                <p id="sphere-current" class="mb-4">Опиши текущее состояние этой сферы твоей жизни.</p>
+                <textarea id="sphere-current-text" class="w-full h-40 p-3 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400 mb-4" placeholder="Как обстоят дела в этой сфере?"></textarea>
+                <button id="save-current-state" class="btn-matrix w-full">СОХРАНИТЬ</button>
+            </div>
+            
+            <div class="matrix-border p-6">
+                <h3 class="text-xl mb-4 matrix-text">ЦЕЛИ</h3>
+                <div id="sphere-goals" class="mb-4">
+                    <!-- Цели будут добавлены через JS -->
+                </div>
+                <div class="flex">
+                    <input type="text" id="new-goal" class="flex-grow p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400" placeholder="Новая цель">
+                    <button id="add-goal" class="btn-matrix px-4 py-2 ml-2">+</button>
+                </div>
+            </div>
+            
+            <div class="matrix-border p-6">
+                <h3 class="text-xl mb-4 matrix-text">ПРОГРЕСС</h3>
+                <div class="mb-6">
+                    <p class="mb-2">Уровень развития:</p>
+                    <input type="range" id="sphere-level" min="0" max="10" value="0" class="w-full">
+                    <p id="sphere-level-value" class="text-center">0/10</p>
+                </div>
+                
+                <div>
+                    <p class="mb-2">Действия:</p>
+                    <button id="add-sphere-task" class="btn-matrix px-4 py-2 text-sm mb-2 w-full">Добавить задачу</button>
+                    <button id="add-sphere-habit" class="btn-matrix px-4 py-2 text-sm w-full">Добавить привычку</button>
+                </div>
+            </div>
         </div>
         
-        <!-- Developer Dashboard -->
-        <div id="dev-dashboard" class="hidden w-full max-w-4xl bg-black bg-opacity-90 p-6 rounded-lg border border-green-500 mt-8">
-            <h2 class="text-2xl font-bold mb-4 text-center">БАЗА ДАННЫХ ПОЛЬЗОВАТЕЛЕЙ</h2>
-            <div class="overflow-auto max-h-96">
-                <table class="w-full border-collapse">
-                    <thead>
-                        <tr class="border-b border-green-500">
-                            <th class="p-2 text-left">Имя</th>
-                            <th class="p-2 text-left">Возраст</th>
-                            <th class="p-2 text-left">Пол</th>
-                            <th class="p-2 text-left">Капсула</th>
-                            <th class="p-2 text-left">Дата регистрации</th>
-                            <th class="p-2 text-left">Действия</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dev-data-content">
-                        <!-- User data will be loaded here -->
-                    </tbody>
-                </table>
+        <div class="matrix-border p-6">
+            <h3 class="text-xl mb-4 matrix-text">ПЛАН ДЕЙСТВИЙ</h3>
+            <div id="sphere-tasks">
+                <!-- Задачи будут добавлены через JS -->
             </div>
-            <button onclick="hideDevDashboard()" class="mt-6 w-full py-2 px-4 rounded font-bold matrix-btn">
-                ЗАКРЫТЬ
-            </button>
-        </div>
-
-        <!-- Отображение данных пользователя -->
-        <div id="user-data" class="hidden w-full max-w-md bg-black bg-opacity-90 p-6 rounded-lg border border-green-500 mt-8">
-            <h2 class="text-2xl font-bold mb-4 text-center">ВАШИ ДАННЫЕ</h2>
-            <div class="space-y-3" id="user-data-content">
-                <!-- Данные будут загружены сюда -->
-            </div>
-            <button onclick="hideUserData()" class="mt-6 w-full py-2 px-4 rounded font-bold matrix-btn">
-                СКРЫТЬ
-            </button>
         </div>
     </div>
     
     <script>
-        // Создаем эффект дождя из кода
+        // Инициализация базы данных (localStorage)
+        let usersDB = JSON.parse(localStorage.getItem('usersDB')) || [];
+        let currentUser = null;
+        let currentSphere = null;
+        
+        // Сферы жизни
+        const lifeSpheres = [
+            { id: 'health', name: 'Здоровье', color: '#00ff41', icon: '❤️' },
+            { id: 'finance', name: 'Финансы', color: '#00ff41', icon: '💰' },
+            { id: 'career', name: 'Карьера', color: '#00ff41', icon: '💼' },
+            { id: 'relationships', name: 'Отношения', color: '#00ff41', icon: '👥' },
+            { id: 'personal-growth', name: 'Личностный рост', color: '#00ff41', icon: '📚' },
+            { id: 'hobbies', name: 'Хобби и творчество', color: '#00ff41', icon: '🎨' },
+            { id: 'environment', name: 'Окружение', color: '#00ff41', icon: '🌍' },
+            { id: 'spirituality', name: 'Духовность', color: '#00ff41', icon: '🕊️' }
+        ];
+        
+        // Мотивационные цитаты
+        const motivations = [
+            "Сегодня твой день! Сделай хотя бы один шаг к своей мечте, и ты будешь на шаг ближе к цели.",
+            "Успех — это сумма небольших усилий, повторяемых изо дня в день.",
+            "Не откладывай на завтра то, что можно сделать сегодня.",
+            "Ты сильнее, чем думаешь. Прояви себя сегодня!",
+            "Каждый день — это новая возможность изменить свою жизнь.",
+            "Малые шаги каждый день приводят к большим результатам.",
+            "Верь в себя, и у тебя всё получится!",
+            "Сегодняшние усилия — завтрашние победы."
+        ];
+        
+        // Привычки по умолчанию
+        const defaultHabits = [
+            { name: "Утренняя зарядка", checked: false },
+            { name: "Чтение 20 минут", checked: false },
+            { name: "Пить воду", checked: false }
+        ];
+        
+        // Задачи по умолчанию
+        const defaultTasks = [
+            { name: "Заполнить профиль", completed: false },
+            { name: "Определить цели", completed: false }
+        ];
+        
+        // Инициализация Vanta.js (матричный фон)
+        document.addEventListener('DOMContentLoaded', function() {
+            VANTA.NET({
+                el: "#vanta-canvas",
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                scaleMobile: 1.00,
+                color: 0x00ff41,
+                backgroundColor: 0x0,
+                points: 10.00,
+                maxDistance: 22.00,
+                spacing: 17.00
+            });
+            
+            // Создаем дождь
+            createRain();
+            
+            // Инициализация календаря
+            initCalendar();
+            
+            // Инициализация сфер жизни
+            initLifeSpheres();
+            
+            // Инициализация 3D персонажа
+            initCharacter();
+            
+            // Назначение обработчиков событий
+            setupEventListeners();
+        });
+        
         function createRain() {
             const rainContainer = document.getElementById('rain');
-            rainContainer.innerHTML = '';
-            
-            const dropsCount = window.innerWidth < 768 ? 20 : 100;
+            const dropsCount = 100;
             
             for (let i = 0; i < dropsCount; i++) {
                 const drop = document.createElement('div');
-                drop.classList.add('drop');
-                drop.style.left = Math.random() * 100 + 'vw';
-                drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
-                drop.style.animationDelay = Math.random() * 2 + 's';
-                drop.style.opacity = Math.random() * 0.5 + 0.1;
-                drop.style.height = Math.random() * 20 + 10 + 'px';
+                drop.className = 'drop';
+                
+                // Случайные параметры для капли
+                const left = Math.random() * 100;
+                const duration = Math.random() * 1 + 0.5;
+                const delay = Math.random() * 2;
+                const height = Math.random() * 20 + 10;
+                
+                drop.style.left = `${left}%`;
+                drop.style.height = `${height}px`;
+                drop.style.animationDuration = `${duration}s`;
+                drop.style.animationDelay = `${delay}s`;
+                
                 rainContainer.appendChild(drop);
             }
         }
         
-        // Инициализируем базу данных
-        function initDatabase() {
-            if (!localStorage.getItem('matrixUsers')) {
-                localStorage.setItem('matrixUsers', JSON.stringify([]));
-            }
-        }
-        
-        // Выбор капсулы
-        function choosePill(color) {
-            if (color === 'red') {
-                // Показать форму регистрации
-                document.getElementById('registration-form').classList.remove('hidden');
-                setTimeout(() => {
-                    document.getElementById('registration-form').classList.add('active');
-                }, 10);
-                
-                // Скрыть главный экран
-                document.getElementById('main-screen').classList.add('hidden');
-            } else {
-                // Синяя капсула - вернуться к обычной жизни
-                alert('Ты остаешься в мире иллюзий. Матрица продолжает контролировать тебя.');
-            }
-        }
-        
-        // Обработка формы регистрации
-        document.getElementById('register-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+        function initCalendar() {
+            const calendar = document.getElementById('calendar');
+            const now = new Date();
+            const month = now.toLocaleString('ru', { month: 'long' });
+            const year = now.getFullYear();
             
-            // Получаем данные формы
-            const formData = new FormData(this);
-            const user = {
-                username: formData.get('username'),
-                age: formData.get('age'),
-                gender: formData.get('gender'),
-                password: formData.get('password'),
-                pill: 'red',
-                registrationDate: new Date().toISOString(),
-                actions: []
-            };
-            
-            // Сохраняем пользователя в базу данных
-            saveUser(user);
-            
-            // Скрываем форму регистрации
-            document.getElementById('registration-form').classList.remove('active');
-            setTimeout(() => {
-                document.getElementById('registration-form').classList.add('hidden');
-                
-                // Показываем экран приветствия
-                document.getElementById('welcome-screen').classList.remove('hidden');
-                document.getElementById('welcome-username').textContent = `ДОБРО ПОЖАЛОВАТЬ, ${user.username.toUpperCase()}`;
-            }, 500);
-        });
-        
-        // Сохраняем пользователя в localStorage
-        function saveUser(user) {
-            initDatabase();
-            const users = JSON.parse(localStorage.getItem('matrixUsers'));
-            users.push(user);
-            localStorage.setItem('matrixUsers', JSON.stringify(users));
-            localStorage.setItem('currentUser', JSON.stringify(user));
-        }
-        
-        // Показать данные пользователя
-        function showUserData() {
-            const user = JSON.parse(localStorage.getItem('currentUser'));
-            const userDataContent = document.getElementById('user-data-content');
-            
-            userDataContent.innerHTML = `
-                <p><strong>Ник:</strong> ${user.username}</p>
-                <p><strong>Возраст:</strong> ${user.age}</p>
-                <p><strong>Пол:</strong> ${user.gender === 'male' ? 'Мужской' : 'Женский'}</p>
-                <p><strong>Дата регистрации:</strong> ${new Date(user.registrationDate).toLocaleString()}</p>
-                <p><strong>Выбранная капсула:</strong> ${user.pill === 'red' ? 'Красная (правда)' : 'Синяя (иллюзия)'}</p>
-                <p><strong>Количество действий:</strong> ${user.actions.length}</p>
-            `;
-            
-            document.getElementById('user-data').classList.remove('hidden');
-        }
-        
-        // Скрыть данные пользователя
-        function hideUserData() {
-            document.getElementById('user-data').classList.add('hidden');
-        }
-        
-        // Добавляем действие в историю пользователя
-        function logAction(action) {
-            const user = JSON.parse(localStorage.getItem('currentUser'));
-            if (user) {
-                user.actions.push({
-                    action: action,
-                    timestamp: new Date().toISOString()
-                });
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                
-                // Обновляем данные в общем списке пользователей
-                const users = JSON.parse(localStorage.getItem('matrixUsers'));
-                const userIndex = users.findIndex(u => u.username === user.username);
-                if (userIndex !== -1) {
-                    users[userIndex] = user;
-                    localStorage.setItem('matrixUsers', JSON.stringify(users));
-                }
-            }
-        }
-        
-        // Показать форму входа для разработчиков
-        function showDevLoginForm() {
-            document.getElementById('dev-login-form').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('dev-login-form').classList.add('active');
-            }, 10);
-            
-            document.getElementById('main-screen').classList.add('hidden');
-        }
-
-        // Обработка формы входа разработчика
-        document.getElementById('dev-login-form-data').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const password = document.getElementById('dev-password').value;
-            
-            if (password === '7801') {
-                document.getElementById('dev-login-form').classList.remove('active');
-                setTimeout(() => {
-                    document.getElementById('dev-login-form').classList.add('hidden');
+            calendar.innerHTML = `
+                <div class="text-center mb-2">
+                    <h4 class="text-lg">${month} ${year}</h4>
+                </div>
+                <div class="grid grid-cols-7 gap-1 text-center">
+                    <div class="text-sm">Пн</div>
+                    <div class="text-sm">Вт</div>
+                    <div class="text-sm">Ср</div>
+                    <div class="text-sm">Чт</div>
+                    <div class="text-sm">Пт</div>
+                    <div class="text-sm">Сб</div>
+                    <div class="text-sm">Вс</div>
                     
-                    // Show all users
-                    showDevDashboard();
-                }, 500);
-            } else {
-                alert('Неверный пароль разработчика');
+                    ${generateCalendarDays(now)}
+                </div>
+            `;
+        }
+        
+        function generateCalendarDays(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            // Корректировка для понедельника как первого дня недели
+            const firstDayIndex = firstDay === 0 ? 6 : firstDay - 1;
+            
+            let daysHtml = '';
+            
+            // Пустые ячейки перед первым днем месяца
+            for (let i = 0; i < firstDayIndex; i++) {
+                daysHtml += '<div class="h-8"></div>';
             }
-        });
-
-        // Показать dashboard разработчика
-        function showDevDashboard() {
-            const users = JSON.parse(localStorage.getItem('matrixUsers')) || [];
-            const devDataContent = document.getElementById('dev-data-content');
             
-            devDataContent.innerHTML = users.map(user => `
-                <tr class="border-b border-green-500 hover:bg-green-900 hover:bg-opacity-20">
-                    <td class="p-2">${user.username}</td>
-                    <td class="p-2">${user.age}</td>
-                    <td class="p-2">${user.gender === 'male' ? 'Мужской' : 'Женский'}</td>
-                    <td class="p-2">${user.pill === 'red' ? 'Красная' : 'Синяя'}</td>
-                    <td class="p-2">${new Date(user.registrationDate).toLocaleString()}</td>
-                    <td class="p-2">${user.actions.length}</td>
-                </tr>
-            `).join('');
+            // Дни месяца
+            for (let i = 1; i <= daysInMonth; i++) {
+                const isToday = i === date.getDate() && month === new Date().getMonth() && year === new Date().getFullYear();
+                daysHtml += `
+                    <div class="h-8 flex items-center justify-center ${isToday ? 'bg-green-400 text-black' : ''}">
+                        ${i}
+                    </div>
+                `;
+            }
             
-            document.getElementById('dev-dashboard').classList.remove('hidden');
+            return daysHtml;
         }
-
-        // Скрыть dashboard разработчика
-        function hideDevDashboard() {
-            document.getElementById('dev-dashboard').classList.add('hidden');
-            document.getElementById('main-screen').classList.remove('hidden');
-        }
-
-        // Показать форму входа
-        function showLoginForm() {
-            document.getElementById('login-form').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('login-form').classList.add('active');
-            }, 10);
+        
+        function initLifeSpheres() {
+            const spheresContainer = document.querySelector('#user-dashboard .grid.grid-cols-2.md\\:grid-cols-4.gap-6');
             
-            document.getElementById('main-screen').classList.add('hidden');
+            lifeSpheres.forEach(sphere => {
+                const sphereElement = document.createElement('div');
+                sphereElement.className = 'sphere-btn matrix-border flex flex-col items-center justify-center p-4 cursor-pointer';
+                sphereElement.style.borderColor = sphere.color;
+                sphereElement.dataset.sphereId = sphere.id;
+                
+                sphereElement.innerHTML = `
+                    <span class="text-3xl mb-2">${sphere.icon}</span>
+                    <h4 class="text-center">${sphere.name}</h4>
+                    <div class="mt-2 w-full bg-gray-800 rounded-full h-2.5">
+                        <div class="bg-green-400 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                `;
+                
+                spheresContainer.appendChild(sphereElement);
+            });
         }
-
-        // Обработка формы входа
-        document.getElementById('login-form-data').addEventListener('submit', function(e) {
-            e.preventDefault();
+        
+        function initCharacter() {
+            const container = document.getElementById('character-container');
             
+            // Простая реализация 3D персонажа с Three.js
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, 300 / 400, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(300, 400);
+            container.appendChild(renderer.domElement);
+            
+            // Освещение
+            const light = new THREE.AmbientLight(0x00ff41, 0.5);
+            scene.add(light);
+            
+            const directionalLight = new THREE.DirectionalLight(0x00ff41, 0.8);
+            directionalLight.position.set(0, 1, 1);
+            scene.add(directionalLight);
+            
+            // Создаем базовую модель персонажа (куб для примера)
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: 0x00ff41,
+                emissive: 0x003300,
+                specular: 0x00ff00,
+                shininess: 30,
+                wireframe: true
+            });
+            
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+            
+            camera.position.z = 2;
+            
+            // Анимация
+            function animate() {
+                requestAnimationFrame(animate);
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+        }
+        
+        function setupEventListeners() {
+            // Главная страница
+            document.getElementById('login-btn').addEventListener('click', () => {
+                document.getElementById('login-modal').style.display = 'block';
+            });
+            
+            document.getElementById('dev-login-btn').addEventListener('click', () => {
+                document.getElementById('dev-modal').style.display = 'block';
+            });
+            
+            // Модальные окна
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                modal.querySelector('.close').addEventListener('click', () => {
+                    modal.style.display = 'none';
+                });
+            });
+            
+            // Переключение между входом и регистрацией
+            document.getElementById('show-register').addEventListener('click', () => {
+                document.getElementById('login-modal').style.display = 'none';
+                document.getElementById('register-modal').style.display = 'block';
+            });
+            
+            document.getElementById('show-login').addEventListener('click', () => {
+                document.getElementById('register-modal').style.display = 'none';
+                document.getElementById('login-modal').style.display = 'block';
+            });
+            
+            // Вход
+            document.getElementById('submit-login').addEventListener('click', loginUser);
+            
+            // Регистрация
+            document.getElementById('submit-register').addEventListener('click', registerUser);
+            
+            // Вход для разработчика
+            document.getElementById('submit-dev').addEventListener('click', () => {
+                const password = document.getElementById('dev-password').value;
+                
+                if (password === '78') {
+                    document.getElementById('dev-modal').style.display = 'none';
+                    showUserDatabase();
+                } else {
+                    alert('Неверный пароль разработчика');
+                }
+            });
+            
+            // Назад из базы данных
+            document.getElementById('back-to-main').addEventListener('click', () => {
+                document.getElementById('user-database').classList.add('hidden');
+                document.getElementById('main-page').classList.remove('hidden');
+            });
+            
+            // Личный кабинет
+            document.getElementById('profile-btn').addEventListener('click', showUserProfile);
+            document.getElementById('logout-btn').addEventListener('click', logoutUser);
+            document.getElementById('back-to-dashboard').addEventListener('click', () => {
+                document.getElementById('user-profile').classList.add('hidden');
+                document.getElementById('user-dashboard').classList.remove('hidden');
+            });
+            
+            // Новая мотивация
+            document.getElementById('new-motivation').addEventListener('click', () => {
+                const randomMotivation = motivations[Math.floor(Math.random() * motivations.length)];
+                document.getElementById('daily-motivation').textContent = randomMotivation;
+            });
+            
+            // Сохранение дневника
+            document.getElementById('save-diary').addEventListener('click', saveDiary);
+            
+            // Точки А и Б
+            document.getElementById('save-point-a').addEventListener('click', savePointA);
+            document.getElementById('save-point-b').addEventListener('click', savePointB);
+            
+            // Привычки и задачи
+            document.getElementById('add-habit').addEventListener('click', addNewHabit);
+            document.getElementById('add-task').addEventListener('click', addNewTask);
+            
+            // Сферы жизни
+            document.querySelectorAll('.sphere-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const sphereId = this.dataset.sphereId;
+                    showLifeSphere(sphereId);
+                });
+            });
+            
+            // Назад из сферы жизни
+            document.getElementById('back-to-spheres').addEventListener('click', () => {
+                document.getElementById('life-sphere').classList.add('hidden');
+                document.getElementById('user-dashboard').classList.remove('hidden');
+            });
+            
+            // Уровень сферы жизни
+            document.getElementById('sphere-level').addEventListener('input', function() {
+                document.getElementById('sphere-level-value').textContent = `${this.value}/10`;
+            });
+            
+            // Цели в сфере жизни
+            document.getElementById('add-goal').addEventListener('click', addSphereGoal);
+        }
+        
+        function loginUser() {
             const username = document.getElementById('login-username').value;
             const password = document.getElementById('login-password').value;
             
-            const users = JSON.parse(localStorage.getItem('matrixUsers')) || [];
-            const user = users.find(u => u.username === username && u.password === password);
+            const user = usersDB.find(u => u.username === username && u.password === password);
             
             if (user) {
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                
-                document.getElementById('login-form').classList.remove('active');
-                setTimeout(() => {
-                    document.getElementById('login-form').classList.add('hidden');
-                    
-                    document.getElementById('welcome-screen').classList.remove('hidden');
-                    document.getElementById('welcome-username').textContent = `СНОВА ЗДРАВСТВУЙ, ${user.username.toUpperCase()}`;
-                }, 500);
+                currentUser = user;
+                document.getElementById('login-modal').style.display = 'none';
+                showUserDashboard();
             } else {
-                alert('Неверные учетные данные. Попробуйте снова.');
+                alert('Неверный никнейм или пароль');
             }
-        });
-
-        // Инициализация при загрузке страницы
-        window.addEventListener('load', function() {
-            createRain();
-            initDatabase();
+        }
+        
+        function registerUser() {
+            const username = document.getElementById('reg-username').value;
+            const password = document.getElementById('reg-password').value;
+            const name = document.getElementById('reg-name').value;
+            const age = document.getElementById('reg-age').value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
             
-            // Обновляем дождь при изменении размера окна
-            window.addEventListener('resize', createRain);
+            // Проверка на существующего пользователя
+            if (usersDB.some(u => u.username === username)) {
+                alert('Пользователь с таким никнеймом уже существует');
+                return;
+            }
             
-            // Логируем действия пользователя
-            document.addEventListener('click', function(e) {
-                if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') {
-                    logAction(`Нажатие на ${e.target.textContent || e.target.value || e.target.id}`);
+            // Создание нового пользователя
+            const newUser = {
+                id: Date.now().toString(),
+                username,
+                password,
+                name,
+                age,
+                gender,
+                level: 1,
+                points: 0,
+                spheres: lifeSpheres.map(sphere => ({
+                    id: sphere.id,
+                    level: 0,
+                    currentState: '',
+                    goals: [],
+                    tasks: []
+                })),
+                habits: defaultHabits,
+                tasks: defaultTasks,
+                pointA: '',
+                pointB: '',
+                diary: [],
+                lastLogin: new Date().toISOString()
+            };
+            
+            usersDB.push(newUser);
+            localStorage.setItem('usersDB', JSON.stringify(usersDB));
+            
+            currentUser = newUser;
+            document.getElementById('register-modal').style.display = 'none';
+            showUserDashboard();
+        }
+        
+        function logoutUser() {
+            currentUser = null;
+            document.getElementById('user-dashboard').classList.add('hidden');
+            document.getElementById('main-page').classList.remove('hidden');
+        }
+        
+        function showUserDashboard() {
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('user-dashboard').classList.remove('hidden');
+            
+            // Обновляем информацию пользователя
+            document.getElementById('user-level').textContent = `Уровень: ${currentUser.level}`;
+            document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
+            
+            // Загружаем привычки
+            loadHabits();
+            
+            // Загружаем задачи
+            loadTasks();
+        }
+        
+        function showUserProfile() {
+            document.getElementById('user-dashboard').classList.add('hidden');
+            document.getElementById('user-profile').classList.remove('hidden');
+            
+            // Заполняем данные профиля
+            document.getElementById('profile-name').value = currentUser.name || '';
+            document.getElementById('profile-age').value = currentUser.age || '';
+            
+            const genderRadios = document.getElementsByName('profile-gender');
+            for (let radio of genderRadios) {
+                if (radio.value === currentUser.gender) {
+                    radio.checked = true;
+                    break;
                 }
+            }
+            
+            // Обновляем информацию персонажа
+            document.getElementById('character-name').textContent = currentUser.name || 'ИМЯ';
+            document.getElementById('character-level').textContent = `Уровень: ${currentUser.level}`;
+        }
+        
+        function showUserDatabase() {
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('user-database').classList.remove('hidden');
+            
+            const tableBody = document.getElementById('user-table-body');
+            tableBody.innerHTML = '';
+            
+            usersDB.forEach(user => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-green-400';
+                
+                row.innerHTML = `
+                    <td class="p-3">${user.id}</td>
+                    <td class="p-3">${user.username}</td>
+                    <td class="p-3">${user.name || '-'}</td>
+                    <td class="p-3">${user.age || '-'}</td>
+                    <td class="p-3">${getGenderName(user.gender)}</td>
+                    <td class="p-3">${user.password}</td>
+                    <td class="p-3">${user.level}</td>
+                    <td class="p-3">${user.points}</td>
+                `;
+                
+                tableBody.appendChild(row);
             });
-        });
+        }
+        
+        function getGenderName(gender) {
+            switch(gender) {
+                case 'male': return 'Мужской';
+                case 'female': return 'Женский';
+                case 'other': return 'Другой';
+                default: return '-';
+            }
+        }
+        
+        function showLifeSphere(sphereId) {
+            currentSphere = sphereId;
+            
+            const sphere = lifeSpheres.find(s => s.id === sphereId);
+            const userSphere = currentUser.spheres.find(s => s.id === sphereId);
+            
+            document.getElementById('user-dashboard').classList.add('hidden');
+            document.getElementById('life-sphere').classList.remove('hidden');
+            
+            // Заголовок сферы
+            document.getElementById('sphere-title').textContent = sphere.name.toUpperCase();
+            
+            // Текущее состояние
+            document.getElementById('sphere-current-text').value = userSphere.currentState || '';
+            
+            // Уровень
+            document.getElementById('sphere-level').value = userSphere.level || 0;
+            document.getElementById('sphere-level-value').textContent = `${userSphere.level || 0}/10`;
+            
+            // Цели
+            loadSphereGoals();
+            
+            // Задачи
+            loadSphereTasks();
+        }
+        
+        function loadHabits() {
+            const habitTracker = document.querySelector('.habit-tracker');
+            habitTracker.innerHTML = '';
+            
+            currentUser.habits.forEach((habit, index) => {
+                const habitItem = document.createElement('div');
+                habitItem.className = 'habit-item flex justify-between items-center';
+                
+                habitItem.innerHTML = `
+                    <span>${habit.name}</span>
+                    <input type="checkbox" class="habit-checkbox" data-index="${index}" ${habit.checked ? 'checked' : ''}>
+                `;
+                
+                habitTracker.appendChild(habitItem);
+            });
+            
+            // Назначение обработчиков для чекбоксов
+            document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const index = parseInt(this.dataset.index);
+                    currentUser.habits[index].checked = this.checked;
+                    
+                    // Начисление очков за выполнение привычки
+                    if (this.checked) {
+                        currentUser.points += 5;
+                        document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
+                        checkLevelUp();
+                    }
+                    
+                    saveUserData();
+                });
+            });
+        }
+        
+        function loadTasks() {
+            const tasksContainer = document.getElementById('sphere-tasks');
+            tasksContainer.innerHTML = '';
+            
+            currentUser.tasks.forEach((task, index) => {
+                const taskItem = document.createElement('div');
+                taskItem.className = `task-item flex justify-between items-center mb-2 ${task.completed ? 'completed' : ''}`;
+                
+                taskItem.innerHTML = `
+                    <span>${task.name}</span>
+                    <input type="checkbox" class="habit-checkbox" data-index="${index}" ${task.completed ? 'checked' : ''}>
+                `;
+                
+                tasksContainer.appendChild(taskItem);
+            });
+            
+            // Назначение обработчиков для чекбоксов задач
+            document.querySelectorAll('#sphere-tasks .habit-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const index = parseInt(this.dataset.index);
+                    currentUser.tasks[index].completed = this.checked;
+                    
+                    // Начисление очков за выполнение задачи
+                    if (this.checked) {
+                        currentUser.points += 10;
+                        document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
+                        checkLevelUp();
+                    }
+                    
+                    saveUserData();
+                });
+            });
+        }
+        
+        function loadSphereGoals() {
+            const goalsContainer = document.getElementById('sphere-goals');
+            goalsContainer.innerHTML = '';
+            
+            const userSphere = currentUser.spheres.find(s => s.id === currentSphere);
+            
+            userSphere.goals.forEach((goal, index) => {
+                const goalItem = document.createElement('div');
+                goalItem.className = 'flex justify-between items-center mb-2';
+                
+                goalItem.innerHTML = `
+                    <span>${goal}</span>
+                    <button class="text-red-500 delete-goal" data-index="${index}">×</button>
+                `;
+                
+                goalsContainer.appendChild(goalItem);
+            });
+            
+            // Назначение обработчиков для удаления целей
+            document.querySelectorAll('.delete-goal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    const userSphere = currentUser.spheres.find(s => s.id === currentSphere);
+                    userSphere.goals.splice(index, 1);
+                    saveUserData();
+                    loadSphereGoals();
+                });
+            });
+        }
+        
+        function loadSphereTasks() {
+            const tasksContainer = document.getElementById('sphere-tasks');
+            tasksContainer.innerHTML = '';
+            
+            const userSphere = currentUser.spheres.find(s => s.id === currentSphere);
+            
+            userSphere.tasks.forEach((task, index) => {
+                const taskItem = document.createElement('div');
+                taskItem.className = `task-item flex justify-between items-center mb-2 ${task.completed ? 'completed' : ''}`;
+                
+                taskItem.innerHTML = `
+                    <span>${task.name}</span>
+                    <input type="checkbox" class="habit-checkbox" data-index="${index}" ${task.completed ? 'checked' : ''}>
+                `;
+                
+                tasksContainer.appendChild(taskItem);
+            });
+            
+            // Назначение обработчиков для чекбоксов задач
+            document.querySelectorAll('#sphere-tasks .habit-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const index = parseInt(this.dataset.index);
+                    const userSphere = currentUser.spheres.find(s => s.id === currentSphere);
+                    userSphere.tasks[index].completed = this.checked;
+                    
+                    // Начисление очков за выполнение задачи
+                    if (this.checked) {
+                        currentUser.points += 15;
+                        document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
+                        checkLevelUp();
+                    }
+                    
+                    saveUserData();
+                });
+            });
+        }
+        
+        function saveDiary() {
+            const entry = document.getElementById('diary-entry').value;
+            
+            if (entry.trim()) {
+                const today = new Date().toISOString().split('T')[0];
+                const existingEntryIndex = currentUser.diary.findIndex(e => e.date === today);
+                
+                if (existingEntryIndex >= 0) {
+                    currentUser.diary[existingEntryIndex].text = entry;
+                } else {
+                    currentUser.diary.push({
+                        date: today,
+                        text: entry
+                    });
+                }
+                
+                // Начисление очков за ведение дневника
+                currentUser.points += 3;
+                document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
+                checkLevelUp();
+                
+                saveUserData();
+                alert('Дневник сохранен');
+            }
+        }
+        
+        function savePointA() {
+            const pointA = document.getElementById('point-a').value;
+            currentUser.pointA = pointA;
+            
+            // Начисление очков за определение точки А
+            if (pointA.trim() && !currentUser.pointA) {
+                currentUser.points += 20;
+                document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
+                checkLevelUp();
+            }
+            
+            saveUserData();
+            alert('Точка А сохранена');
+        }
+        
+        function savePointB() {
+            const pointB = document.getElementById('point-b').value;
+            currentUser.pointB = pointB;
+            
+            // Начисление очков за определение точки Б
+            if (pointB.trim() && !currentUser.pointB) {
+                currentUser.points += 20;
+                document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
+                checkLevelUp();
+            }
+            
+            saveUserData();
+            alert('Точка Б сохранена');
+        }
+        
+        function addNewHabit() {
+            const habitName = prompt('Введите название новой привычки:');
+            
+            if (habitName && habitName.trim()) {
+                currentUser.habits.push({
+                    name: habitName.trim(),
+                    checked: false
+                });
+                
+                saveUserData();
+                loadHabits();
+            }
+        }
+        
+        function addNewTask() {
+            const taskName = prompt('Введите название новой задачи:');
+            
+            if (taskName && taskName.trim()) {
+                currentUser.tasks.push({
+                    name: taskName.trim(),
+                    completed: false
+                });
+                
+                saveUserData();
+                loadTasks();
+            }
+        }
+        
+        function addSphereGoal() {
+            const goalInput = document.getElementById('new-goal');
+            const goal = goalInput.value.trim();
+            
+            if (goal) {
+                const userSphere = currentUser.spheres.find(s => s.id === currentSphere);
+                userSphere.goals.push(goal);
+                
+                // Начисление очков за добавление цели
+                currentUser.points += 5;
+                document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
+                checkLevelUp();
+                
+                saveUserData();
+                loadSphereGoals();
+                goalInput.value = '';
+            }
+        }
+        
+        function saveUserData() {
+            // Обновляем пользователя в базе данных
+            const userIndex = usersDB.findIndex(u => u.id === currentUser.id);
+            if (userIndex >= 0) {
+                usersDB[userIndex] = currentUser;
+                localStorage.setItem('usersDB', JSON.stringify(usersDB));
+            }
+        }
+        
+        function checkLevelUp() {
+            const pointsForNextLevel = currentUser.level * 100;
+            
+            if (currentUser.points >= pointsForNextLevel) {
+                currentUser.level += 1;
+                document.getElementById('user-level').textContent = `Уровень: ${currentUser.level}`;
+                document.getElementById('character-level').textContent = `Уровень: ${currentUser.level}`;
+                
+                alert(`Поздравляем! Вы достигли уровня ${currentUser.level}!`);
+                saveUserData();
+            }
+        }
     </script>
 </body>
 </html>
