@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Матрица: Выбор</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #000;
+            color: #00ff41;
+            overflow: hidden;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        .matrix-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8) 1px, transparent 1px, transparent 2px);
+            z-index: -1;
+        }
+        
+        .matrix-code {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 255, 65, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        .pill {
+            width: 80px;
+            height: 160px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+        }
+        
+        .pill:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.8);
+        }
+        
+        .pill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.3) 50%, transparent 60%);
+            background-size: 200% 200%;
+            animation: shine 2s infinite;
+        }
+        
+        @keyframes shine {
+            0% {
+                background-position: 100% 100%;
+            }
+            100% {
+                background-position: 0% 0%;
+            }
+        }
+        
+        .red-pill {
+            background: linear-gradient(to bottom, #ff0033, #800020);
+        }
+        
+        .blue-pill {
+            background: linear-gradient(to bottom, #0066ff, #003380);
+        }
+        
+        .registration-form {
+            transform: scale(0);
+            opacity: 0;
+            transition: all 0.5s ease;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ff41;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.7);
+        }
+        
+        .registration-form.active {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .glitch {
+            position: relative;
+        }
+        
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+        
+        .glitch::before {
+            color: #0ff;
+            z-index: -1;
+            animation: glitch-effect 3s infinite;
+        }
+        
+        .glitch::after {
+            color: #f0f;
+            z-index: -2;
+            animation: glitch-effect 2s infinite reverse;
+        }
+        
+        @keyframes glitch-effect {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-3px, 3px);
+            }
+            40% {
+                transform: translate(-3px, -3px);
+            }
+            60% {
+                transform: translate(3px, 3px);
+            }
+            80% {
+                transform: translate(3px, -3px);
+            }
+            100% {
+                transform: translate(0);
+            }
+        }
+        
+        .matrix-input {
+            background: transparent;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            padding: 10px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .matrix-input:focus {
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.7);
+        }
+        
+        .matrix-btn {
+            background: linear-gradient(to right, #00a800, #00ff41);
+            color: black;
+            font-weight: bold;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .matrix-btn:hover {
+            background: linear-gradient(to right, #00ff41, #00a800);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.7);
+        }
+        
+        .flicker {
+            animation: flicker 5s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 1;
+            }
+            20%, 22%, 24%, 55% {
+                opacity: 0.5;
+            }
+        }
+        
+        .rain {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        .drop {
+            position: absolute;
+            width: 1px;
+            height: 30px;
+            background: linear-gradient(to bottom, transparent, #00ff41);
+            animation: rain 1s linear infinite;
+        }
+        
+        @keyframes rain {
+            0% {
+                transform: translateY(-100vh);
+            }
+            100% {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
+</head>
+<body class="relative">
+    <div class="matrix-bg"></div>
+    <div class="matrix-code"></div>
+    <div class="rain" id="rain"></div>
+    
+    <div class="container mx-auto px-4 h-screen flex flex-col justify-center items-center">
+        <!-- Главный экран выбора -->
+        <div id="main-screen" class="text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-8 glitch flicker" data-text="ТЫ ГОТОВ ИЗМЕНИТЬ СВОЮ ЖИЗНЬ?">ТЫ ГОТОВ ИЗМЕНИТЬ СВОЮ ЖИЗНЬ?</h1>
+            
+            <div class="flex flex-col md:flex-row justify-center items-center gap-12 mb-12">
+                <div class="flex flex-col items-center">
+                    <div class="pill blue-pill mb-4" onclick="choosePill('blue')"></div>
+                    <p class="text-xl">Остаться в иллюзии</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="pill red-pill mb-4" onclick="choosePill('red')"></div>
+                    <p class="text-xl">Узнать правду</p>
+                </div>
+            </div>
+            
+            <p class="text-lg md:text-xl mb-8">Выбор за тобой. Но помни: после выбора пути назад не будет.</p>
+        </div>
+        
+        <!-- Форма регистрации -->
+        <div id="registration-form" class="registration-form p-8 rounded-lg w-full max-w-md hidden">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center">РЕГИСТРАЦИЯ В МАТРИЦЕ</h2>
+            
+            <form id="register-form" class="space-y-4">
+                <div>
+                    <label for="username" class="block mb-2">Уникальный ник:</label>
+                    <input type="text" id="username" name="username" required 
+                           class="w-full matrix-input rounded" 
+                           placeholder="Нео">
+                </div>
+                
+                <div>
+                    <label for="age" class="block mb-2">Возраст:</label>
+                    <input type="number" id="age" name="age" min="13" max="100" required 
+                           class="w-full matrix-input rounded">
+                </div>
+                
+                <div>
+                    <label class="block mb-2">Пол:</label>
+                    <div class="flex space-x-4">
+                        <label class="flex items-center">
+                            <input type="radio" name="gender" value="male" class="matrix-input" checked>
+                            <span class="ml-2">Мужской</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="gender" value="female" class="matrix-input">
+                            <span class="ml-2">Женский</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="password" class="block mb-2">Пароль:</label>
+                    <input type="password" id="password" name="password" required 
+                           class="w-full matrix-input rounded" 
+                           placeholder="••••••••">
+                </div>
+                
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-3 px-4 rounded font-bold matrix-btn">
+                        ПРОДОЛЖИТЬ ПУТЬ
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Экран после регистрации -->
+        <div id="welcome-screen" class="text-center hidden">
+            <h1 class="text-4xl md:text-6xl font-bold mb-8 glitch" data-text="ДОБРО ПОЖАЛОВАТЬ В МАТРИЦУ" id="welcome-username">ДОБРО ПОЖАЛОВАТЬ В МАТРИЦУ</h1>
+            <p class="text-xl mb-6">Ты сделал свой выбор. Теперь ты часть системы.</p>
+            <p class="text-lg mb-8">Твои данные сохранены. Все твои действия теперь будут записываться.</p>
+            <button onclick="showUserData()" class="py-3 px-6 rounded font-bold matrix-btn">
+                ПОКАЗАТЬ МОИ ДАННЫЕ
+            </button>
+        </div>
+        
+        <!-- Отображение данных пользователя -->
+        <div id="user-data" class="hidden w-full max-w-md bg-black bg-opacity-90 p-6 rounded-lg border border-green-500 mt-8">
+            <h2 class="text-2xl font-bold mb-4 text-center">ВАШИ ДАННЫЕ</h2>
+            <div class="space-y-3" id="user-data-content">
+                <!-- Данные будут загружены сюда -->
+            </div>
+            <button onclick="hideUserData()" class="mt-6 w-full py-2 px-4 rounded font-bold matrix-btn">
+                СКРЫТЬ
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Создаем эффект дождя из кода
+        function createRain() {
+            const rainContainer = document.getElementById('rain');
+            rainContainer.innerHTML = '';
+            
+            const dropsCount = window.innerWidth < 768 ? 30 : 100;
+            
+            for (let i = 0; i < dropsCount; i++) {
+                const drop = document.createElement('div');
+                drop.classList.add('drop');
+                drop.style.left = Math.random() * 100 + 'vw';
+                drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+                drop.style.animationDelay = Math.random() * 2 + 's';
+                drop.style.opacity = Math.random() * 0.5 + 0.1;
+                drop.style.height = Math.random() * 20 + 10 + 'px';
+                rainContainer.appendChild(drop);
+            }
+        }
+        
+        // Инициализируем базу данных
+        function initDatabase() {
+            if (!localStorage.getItem('matrixUsers')) {
+                localStorage.setItem('matrixUsers', JSON.stringify([]));
+            }
+        }
+        
+        // Выбор капсулы
+        function choosePill(color) {
+            if (color === 'red') {
+                // Показать форму регистрации
+                document.getElementById('registration-form').classList.remove('hidden');
+                setTimeout(() => {
+                    document.getElementById('registration-form').classList.add('active');
+                }, 10);
+                
+                // Скрыть главный экран
+                document.getElementById('main-screen').classList.add('hidden');
+            } else {
+                // Синяя капсула - вернуться к обычной жизни
+                alert('Ты остаешься в мире иллюзий. Матрица продолжает контролировать тебя.');
+            }
+        }
+        
+        // Обработка формы регистрации
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Получаем данные формы
+            const formData = new FormData(this);
+            const user = {
+                username: formData.get('username'),
+                age: formData.get('age'),
+                gender: formData.get('gender'),
+                password: formData.get('password'),
+                pill: 'red',
+                registrationDate: new Date().toISOString(),
+                actions: []
+            };
+            
+            // Сохраняем пользователя в базу данных
+            saveUser(user);
+            
+            // Скрываем форму регистрации
+            document.getElementById('registration-form').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('registration-form').classList.add('hidden');
+                
+                // Показываем экран приветствия
+                document.getElementById('welcome-screen').classList.remove('hidden');
+                document.getElementById('welcome-username').textContent = `ДОБРО ПОЖАЛОВАТЬ, ${user.username.toUpperCase()}`;
+            }, 500);
+        });
+        
+        // Сохраняем пользователя в localStorage
+        function saveUser(user) {
+            initDatabase();
+            const users = JSON.parse(localStorage.getItem('matrixUsers'));
+            users.push(user);
+            localStorage.setItem('matrixUsers', JSON.stringify(users));
+            localStorage.setItem('currentUser', JSON.stringify(user));
+        }
+        
+        // Показать данные пользователя
+        function showUserData() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const userDataContent = document.getElementById('user-data-content');
+            
+            userDataContent.innerHTML = `
+                <p><strong>Ник:</strong> ${user.username}</p>
+                <p><strong>Возраст:</strong> ${user.age}</p>
+                <p><strong>Пол:</strong> ${user.gender === 'male' ? 'Мужской' : 'Женский'}</p>
+                <p><strong>Дата регистрации:</strong> ${new Date(user.registrationDate).toLocaleString()}</p>
+                <p><strong>Выбранная капсула:</strong> ${user.pill === 'red' ? 'Красная (правда)' : 'Синяя (иллюзия)'}</p>
+                <p><strong>Количество действий:</strong> ${user.actions.length}</p>
+            `;
+            
+            document.getElementById('user-data').classList.remove('hidden');
+        }
+        
+        // Скрыть данные пользователя
+        function hideUserData() {
+            document.getElementById('user-data').classList.add('hidden');
+        }
+        
+        // Добавляем действие в историю пользователя
+        function logAction(action) {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (user) {
+                user.actions.push({
+                    action: action,
+                    timestamp: new Date().toISOString()
+                });
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                
+                // Обновляем данные в общем списке пользователей
+                const users = JSON.parse(localStorage.getItem('matrixUsers'));
+                const userIndex = users.findIndex(u => u.username === user.username);
+                if (userIndex !== -1) {
+                    users[userIndex] = user;
+                    localStorage.setItem('matrixUsers', JSON.stringify(users));
+                }
+            }
+        }
+        
+        // Инициализация при загрузке страницы
+        window.addEventListener('load', function() {
+            createRain();
+            initDatabase();
+            
+            // Обновляем дождь при изменении размера окна
+            window.addEventListener('resize', createRain);
+            
+            // Логируем действия пользователя
+            document.addEventListener('click', function(e) {
+                if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') {
+                    logAction(`Нажатие на ${e.target.textContent || e.target.value || e.target.id}`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
