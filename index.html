@@ -245,9 +245,62 @@
                 </div>
             </div>
             
-            <p class="text-lg md:text-xl mb-8">Выбор за тобой. Но помни: после выбора пути назад не будет.</p>
+            <p class="text-lg md:text-xl mb-4">Выбор за тобой. Но помни: после выбора пути назад не будет.</p>
+            <button onclick="showLoginForm()" class="text-sm md:text-base py-2 px-4 rounded font-bold matrix-btn">
+                УЖЕ В МАТРИЦЕ? ВОЙТИ
+            </button>
+            <button onclick="showDevLoginForm()" class="text-xs md:text-sm py-1 px-2 rounded font-bold mt-2" style="background: #333; color: #00ff41; border: 1px solid #00ff41;">
+                ДЛЯ РАЗРАБОТЧИКОВ
+            </button>
         </div>
         
+        <!-- Форма входа для разработчиков -->
+        <div id="dev-login-form" class="registration-form p-8 rounded-lg w-full max-w-md hidden">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center">ДОСТУП РАЗРАБОТЧИКА</h2>
+            
+            <form id="dev-login-form-data" class="space-y-4">
+                <div>
+                    <label for="dev-password" class="block mb-2">Пароль:</label>
+                    <input type="password" id="dev-password" name="password" required 
+                           class="w-full matrix-input rounded" 
+                           placeholder="••••••••">
+                </div>
+                
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-3 px-4 rounded font-bold matrix-btn">
+                        ДОСТУП К БАЗЕ
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Форма входа -->
+        <div id="login-form" class="registration-form p-8 rounded-lg w-full max-w-md hidden">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center">ВХОД В МАТРИЦУ</h2>
+            
+            <form id="login-form-data" class="space-y-4">
+                <div>
+                    <label for="login-username" class="block mb-2">Ваш ник:</label>
+                    <input type="text" id="login-username" name="username" required 
+                           class="w-full matrix-input rounded" 
+                           placeholder="Нео">
+                </div>
+                
+                <div>
+                    <label for="login-password" class="block mb-2">Пароль:</label>
+                    <input type="password" id="login-password" name="password" required 
+                           class="w-full matrix-input rounded" 
+                           placeholder="••••••••">
+                </div>
+                
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-3 px-4 rounded font-bold matrix-btn">
+                        ВОЙТИ В СИСТЕМУ
+                    </button>
+                </div>
+            </form>
+        </div>
+
         <!-- Форма регистрации -->
         <div id="registration-form" class="registration-form p-8 rounded-lg w-full max-w-md hidden">
             <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center">РЕГИСТРАЦИЯ В МАТРИЦЕ</h2>
@@ -305,6 +358,31 @@
             </button>
         </div>
         
+        <!-- Developer Dashboard -->
+        <div id="dev-dashboard" class="hidden w-full max-w-4xl bg-black bg-opacity-90 p-6 rounded-lg border border-green-500 mt-8">
+            <h2 class="text-2xl font-bold mb-4 text-center">БАЗА ДАННЫХ ПОЛЬЗОВАТЕЛЕЙ</h2>
+            <div class="overflow-auto max-h-96">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="border-b border-green-500">
+                            <th class="p-2 text-left">Имя</th>
+                            <th class="p-2 text-left">Возраст</th>
+                            <th class="p-2 text-left">Пол</th>
+                            <th class="p-2 text-left">Капсула</th>
+                            <th class="p-2 text-left">Дата регистрации</th>
+                            <th class="p-2 text-left">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dev-data-content">
+                        <!-- User data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+            <button onclick="hideDevDashboard()" class="mt-6 w-full py-2 px-4 rounded font-bold matrix-btn">
+                ЗАКРЫТЬ
+            </button>
+        </div>
+
         <!-- Отображение данных пользователя -->
         <div id="user-data" class="hidden w-full max-w-md bg-black bg-opacity-90 p-6 rounded-lg border border-green-500 mt-8">
             <h2 class="text-2xl font-bold mb-4 text-center">ВАШИ ДАННЫЕ</h2>
@@ -442,6 +520,95 @@
             }
         }
         
+        // Показать форму входа для разработчиков
+        function showDevLoginForm() {
+            document.getElementById('dev-login-form').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('dev-login-form').classList.add('active');
+            }, 10);
+            
+            document.getElementById('main-screen').classList.add('hidden');
+        }
+
+        // Обработка формы входа разработчика
+        document.getElementById('dev-login-form-data').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('dev-password').value;
+            
+            if (password === '7801') {
+                document.getElementById('dev-login-form').classList.remove('active');
+                setTimeout(() => {
+                    document.getElementById('dev-login-form').classList.add('hidden');
+                    
+                    // Show all users
+                    showDevDashboard();
+                }, 500);
+            } else {
+                alert('Неверный пароль разработчика');
+            }
+        });
+
+        // Показать dashboard разработчика
+        function showDevDashboard() {
+            const users = JSON.parse(localStorage.getItem('matrixUsers')) || [];
+            const devDataContent = document.getElementById('dev-data-content');
+            
+            devDataContent.innerHTML = users.map(user => `
+                <tr class="border-b border-green-500 hover:bg-green-900 hover:bg-opacity-20">
+                    <td class="p-2">${user.username}</td>
+                    <td class="p-2">${user.age}</td>
+                    <td class="p-2">${user.gender === 'male' ? 'Мужской' : 'Женский'}</td>
+                    <td class="p-2">${user.pill === 'red' ? 'Красная' : 'Синяя'}</td>
+                    <td class="p-2">${new Date(user.registrationDate).toLocaleString()}</td>
+                    <td class="p-2">${user.actions.length}</td>
+                </tr>
+            `).join('');
+            
+            document.getElementById('dev-dashboard').classList.remove('hidden');
+        }
+
+        // Скрыть dashboard разработчика
+        function hideDevDashboard() {
+            document.getElementById('dev-dashboard').classList.add('hidden');
+            document.getElementById('main-screen').classList.remove('hidden');
+        }
+
+        // Показать форму входа
+        function showLoginForm() {
+            document.getElementById('login-form').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('login-form').classList.add('active');
+            }, 10);
+            
+            document.getElementById('main-screen').classList.add('hidden');
+        }
+
+        // Обработка формы входа
+        document.getElementById('login-form-data').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            const users = JSON.parse(localStorage.getItem('matrixUsers')) || [];
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                
+                document.getElementById('login-form').classList.remove('active');
+                setTimeout(() => {
+                    document.getElementById('login-form').classList.add('hidden');
+                    
+                    document.getElementById('welcome-screen').classList.remove('hidden');
+                    document.getElementById('welcome-username').textContent = `СНОВА ЗДРАВСТВУЙ, ${user.username.toUpperCase()}`;
+                }, 500);
+            } else {
+                alert('Неверные учетные данные. Попробуйте снова.');
+            }
+        });
+
         // Инициализация при загрузке страницы
         window.addEventListener('load', function() {
             createRain();
