@@ -140,11 +140,11 @@
             <h2 class="text-2xl font-bold mb-4">Вход</h2>
             <div class="mb-4">
                 <label class="block mb-2">Логин</label>
-                <input type="text" id="login-username" class="input-field w-full p-3">
+                <input type="text" id="login-username" class="input-field w-full p-3 bg-white text-black dark:bg-white dark:text-black">
             </div>
             <div class="mb-6">
                 <label class="block mb-2">Пароль</label>
-                <input type="password" id="login-password" class="w-full p-2 border rounded text-black">
+                <input type="password" id="login-password" class="w-full p-2 border rounded bg-white text-black dark:bg-white dark:text-black">
             </div>
             <div class="flex justify-between">
                 <button id="login-submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Войти</button>
@@ -199,6 +199,9 @@
                 <div id="user-stats" class="text-lg"></div>
             </div>
             <div class="flex space-x-2">
+                <button id="messages-toggle" class="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white" title="Общаться с наставником">
+                    <i class="fas fa-comments"></i>
+                </button>
                 <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
                     <i class="fas fa-moon text-gray-600 dark:hidden"></i>
                     <i class="fas fa-sun text-yellow-400 hidden dark:block"></i>
@@ -312,6 +315,10 @@
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold">Панель разработчика</h2>
             <div class="flex space-x-2">
+                <button id="inbox-btn" class="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white relative" title="Входящие сообщения">
+                    <i class="fas fa-inbox"></i>
+                    <span id="inbox-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
                 <button id="theme-toggle-dev" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700">
                     <i class="fas fa-moon dark:hidden"></i>
                     <i class="fas fa-sun hidden dark:block"></i>
@@ -357,10 +364,70 @@
         </div>
     </div>
 
+    <!-- User Messages Modal -->
+    <div id="user-messages-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="card rounded-lg p-6 w-full max-w-md max-h-[80vh] overflow-hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Общение с наставником</h3>
+                <button id="close-user-messages" class="p-2 text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="user-messages-container" class="overflow-y-auto max-h-[60vh] pr-2 mb-4">
+                <!-- Messages will be loaded here -->
+            </div>
+            <div class="flex space-x-2">
+                <textarea id="user-message-input" class="flex-1 p-2 border rounded text-black" rows="2" placeholder="Ваше сообщение..."></textarea>
+                <button id="send-user-message" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inbox Modal -->
+    <div id="inbox-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="card rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Входящие сообщения</h3>
+                <button id="close-inbox" class="p-2 text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="inbox-messages" class="overflow-y-auto max-h-[60vh] pr-2">
+                <!-- Messages will be loaded here -->
+            </div>
+            <div class="mt-4">
+                <textarea id="inbox-reply" class="w-full p-2 border rounded text-black" rows="3" placeholder="Ответ пользователю..."></textarea>
+                <button id="send-reply" class="mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Отправить ответ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inbox Modal -->
+    <div id="inbox-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="card rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Входящие сообщения</h3>
+                <button id="close-inbox" class="p-2 text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="inbox-messages" class="overflow-y-auto max-h-[60vh] pr-2">
+                <!-- Messages will be loaded here -->
+            </div>
+            <div class="mt-4">
+                <textarea id="inbox-reply" class="w-full p-2 border rounded text-black" rows="3" placeholder="Ответ пользователю..."></textarea>
+                <button id="send-reply" class="mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Отправить ответ</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Локальное хранилище для пользователей
+        // Локальное хранилище для пользователей и разработчика
         const usersDB = JSON.parse(localStorage.getItem('usersDB')) || {};
+        const devDB = JSON.parse(localStorage.getItem('devDB')) || { inbox: [] };
         const DEV_PASSWORD = "78";
         
         // Текущий пользователь
@@ -430,6 +497,15 @@
 
         // Инициализация всех кнопок и событий
         function initButtons() {
+            // User messages buttons
+            document.getElementById('messages-toggle')?.addEventListener('click', showUserMessages);
+            document.getElementById('close-user-messages')?.addEventListener('click', hideUserMessages);
+            document.getElementById('send-user-message')?.addEventListener('click', sendUserMessage);
+            
+            // Inbox buttons
+            document.getElementById('inbox-btn')?.addEventListener('click', showInbox);
+            document.getElementById('close-inbox')?.addEventListener('click', hideInbox);
+            document.getElementById('send-reply')?.addEventListener('click', sendReply);
             // Главный экран
             document.getElementById('login-btn').addEventListener('click', showLoginForm);
             document.getElementById('register-btn').addEventListener('click', showRegisterForm);
@@ -546,8 +622,12 @@
                 days: {},
                 messages: [],
                 energyHistory: [],
-                moodHistory: []
+                moodHistory: [],
+                registrationDate: new Date().toISOString()
             };
+            
+            // Обновляем дату последней активности
+            user.lastActivity = new Date().toISOString();
             
             // Сохраняем в локальное хранилище
             localStorage.setItem('usersDB', JSON.stringify(usersDB));
@@ -599,7 +679,7 @@
             document.getElementById('user-stats').innerHTML = `
                 Успешных дней: <span class="text-green-500">${user.stats.successDays}</span> |
                 Срывов: <span class="text-red-500">${user.stats.failDays}</span> |
-                Текущая серия: <span class="text-blue-500">${user.stats.currentStreak}</span>
+                Текущий день: <span class="text-blue-500">${user.stats.currentStreak}</span>
             `;
             
             // Определяем текущий день
@@ -632,6 +712,19 @@
             loadUserHistory();
         }
 
+        // Обновить счетчик сообщений
+        function updateInboxBadge() {
+            const badge = document.getElementById('inbox-badge');
+            const unreadCount = devDB.inbox.length;
+            
+            if (unreadCount > 0) {
+                badge.classList.remove('hidden');
+                badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
         // Загрузка панели разработчика
         function loadDevPanel() {
             document.getElementById('main-screen').classList.add('hidden');
@@ -639,6 +732,22 @@
             
             // Загружаем список пользователей
             loadUsersList();
+            
+            // Обновляем счетчик сообщений
+            updateInboxBadge();
+        }
+
+        // Обновить счетчик сообщений
+        function updateInboxBadge() {
+            const badge = document.getElementById('inbox-badge');
+            const unreadCount = devDB.inbox.length;
+            
+            if (unreadCount > 0) {
+                badge.classList.remove('hidden');
+                badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+            } else {
+                badge.classList.add('hidden');
+            }
         }
 
         // Загрузка списка пользователей
@@ -686,6 +795,7 @@
             document.getElementById('selected-user-info').innerHTML = `
                 <div class="font-semibold">${username}</div>
                 <div class="text-sm mb-2">Зарегистрирован: ${new Date(user.registrationDate || Date.now()).toLocaleDateString()}</div>
+                <div class="text-sm">Последняя активность: ${user.lastActivity ? new Date(user.lastActivity).toLocaleString() : 'Нет данных'}</div>
             `;
             
             // Статистика
@@ -702,7 +812,7 @@
                 </div>
             `;
             
-            // История дней
+            // История дней с более подробной информацией
             const historyContainer = document.getElementById('dev-user-history');
             historyContainer.innerHTML = '';
             
@@ -715,6 +825,7 @@
                     <div class="font-semibold">День ${day}: <span class="${dayData.status === 'success' ? 'text-green-500' : 'text-red-500'}">${dayData.status === 'success' ? 'Успех' : 'Срыв'}</span></div>
                     <div>Энергия: ${dayData.energy}/10 | Настроение: ${dayData.mood}/10</div>
                     <div class="text-xs text-gray-400">${dayData.notes || 'Нет заметок'}</div>
+                    <div class="text-xs text-gray-500 mt-1">${new Date(dayData.date).toLocaleString()}</div>
                 `;
                 historyContainer.appendChild(dayElement);
             });
@@ -800,6 +911,80 @@
             } else {
                 alert('Поздравляем! Вы завершили 31-дневный челлендж!');
             }
+        }
+
+        // Inbox functions
+        function showInbox() {
+            const inbox = document.getElementById('inbox-modal');
+            inbox.classList.remove('hidden');
+            loadInboxMessages();
+        }
+
+        function hideInbox() {
+            document.getElementById('inbox-modal').classList.add('hidden');
+        }
+
+        function loadInboxMessages() {
+            const container = document.getElementById('inbox-messages');
+            container.innerHTML = '';
+            
+            if (devDB.inbox.length === 0) {
+                container.innerHTML = '<div class="text-center py-4 text-gray-500">Нет новых сообщений</div>';
+                return;
+            }
+            
+            devDB.inbox.forEach((msg, index) => {
+                const msgElement = document.createElement('div');
+                msgElement.className = 'mb-4 p-3 rounded-lg bg-gray-700 bg-opacity-20';
+                msgElement.innerHTML = `
+                    <div class="font-semibold">От: ${msg.fromUsername}</div>
+                    <div class="text-sm mb-2">${msg.text}</div>
+                    <div class="text-xs text-gray-400">${new Date(msg.date).toLocaleString()}</div>
+                    <button data-index="${index}" class="reply-btn mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">
+                        Ответить
+                    </button>
+                `;
+                container.appendChild(msgElement);
+            });
+            
+            // Add reply button handlers
+            document.querySelectorAll('.reply-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = this.getAttribute('data-index');
+                    const msg = devDB.inbox[index];
+                    document.getElementById('inbox-reply').value = `@${msg.fromUsername} `;
+                });
+            });
+        }
+
+        function sendReply() {
+            const replyText = document.getElementById('inbox-reply').value.trim();
+            if (!replyText) {
+                alert('Введите текст ответа');
+                return;
+            }
+            
+            // Extract username if replying to specific message
+            let username = '';
+            if (replyText.startsWith('@')) {
+                username = replyText.split(' ')[0].substring(1);
+            }
+            
+            if (username && usersDB[username]) {
+                usersDB[username].messages.push({
+                    from: 'dev',
+                    text: replyText,
+                    date: new Date().toISOString()
+                });
+                localStorage.setItem('usersDB', JSON.stringify(usersDB));
+                alert('Ответ отправлен пользователю ' + username);
+            } else {
+                alert('Не удалось определить пользователя для ответа');
+                return;
+            }
+            
+            document.getElementById('inbox-reply').value = '';
+            hideInbox();
         }
 
         // Обновить статистику пользователя
@@ -904,10 +1089,20 @@
             });
         }
 
+        // Show/hide user messages modal
+        function showUserMessages() {
+            document.getElementById('user-messages-modal').classList.remove('hidden');
+            loadUserMessages();
+        }
+
+        function hideUserMessages() {
+            document.getElementById('user-messages-modal').classList.add('hidden');
+        }
+
         // Загрузить сообщения пользователя
         function loadUserMessages() {
             const user = usersDB[currentUser];
-            const container = document.getElementById('messages-container');
+            const container = document.getElementById('user-messages-container');
             container.innerHTML = '';
             
             if (user.messages.length === 0) {
@@ -965,22 +1160,118 @@
 
         // Отправить сообщение от пользователя
         function sendUserMessage() {
-            const text = document.getElementById('new-message').value.trim();
+            const text = document.getElementById('user-message-input').value.trim();
             if (!text) {
                 alert('Пожалуйста, введите текст сообщения');
                 return;
             }
             
             const user = usersDB[currentUser];
-            user.messages.push({
+            const userMessage = {
                 from: 'user',
+                fromUsername: currentUser,
                 text: text,
                 date: new Date().toISOString()
+            };
+            
+            // Сохраняем у пользователя
+            user.messages.push(userMessage);
+            localStorage.setItem('usersDB', JSON.stringify(usersDB));
+            
+            // Отправляем разработчику
+            devDB.inbox.push(userMessage);
+            localStorage.setItem('devDB', JSON.stringify(devDB));
+            
+            document.getElementById('user-message-input').value = '';
+            loadUserMessages();
+            
+            // Show success message
+            const successMsg = document.createElement('div');
+            successMsg.className = 'text-green-500 text-sm mt-2';
+            successMsg.textContent = 'Сообщение отправлено';
+            document.getElementById('user-messages-container').appendChild(successMsg);
+            setTimeout(() => successMsg.remove(), 3000);
+            
+            // Обновляем бейдж, если разработчик в системе
+            if (isDevMode) {
+                updateInboxBadge();
+            }
+        }
+
+        // Показать/скрыть inbox
+        function showInbox() {
+            const inbox = document.getElementById('inbox-modal');
+            inbox.classList.remove('hidden');
+            loadInboxMessages();
+        }
+
+        function hideInbox() {
+            document.getElementById('inbox-modal').classList.add('hidden');
+        }
+
+        // Загрузить сообщения в inbox
+        function loadInboxMessages() {
+            const container = document.getElementById('inbox-messages');
+            container.innerHTML = '';
+            
+            if (devDB.inbox.length === 0) {
+                container.innerHTML = '<div class="text-center py-4 text-gray-500">Нет новых сообщений</div>';
+                return;
+            }
+            
+            devDB.inbox.forEach((msg, index) => {
+                const msgElement = document.createElement('div');
+                msgElement.className = 'mb-4 p-3 rounded-lg bg-gray-700 bg-opacity-20';
+                msgElement.innerHTML = `
+                    <div class="font-semibold">От: ${msg.fromUsername}</div>
+                    <div class="text-sm mb-2">${msg.text}</div>
+                    <div class="text-xs text-gray-400">${new Date(msg.date).toLocaleString()}</div>
+                    <button data-index="${index}" class="reply-btn mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">
+                        Ответить
+                    </button>
+                `;
+                container.appendChild(msgElement);
             });
             
-            localStorage.setItem('usersDB', JSON.stringify(usersDB));
-            document.getElementById('new-message').value = '';
-            loadUserMessages();
+            // Add reply button handlers
+            document.querySelectorAll('.reply-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = this.getAttribute('data-index');
+                    const msg = devDB.inbox[index];
+                    document.getElementById('inbox-reply').value = `@${msg.fromUsername} `;
+                });
+            });
+        }
+
+        // Отправить ответ из inbox
+        function sendReply() {
+            const replyText = document.getElementById('inbox-reply').value.trim();
+            if (!replyText) {
+                alert('Введите текст ответа');
+                return;
+            }
+            
+            // Extract username if replying to specific message
+            let username = '';
+            if (replyText.startsWith('@')) {
+                username = replyText.split(' ')[0].substring(1);
+            }
+            
+            if (username && usersDB[username]) {
+                usersDB[username].messages.push({
+                    from: 'dev',
+                    text: replyText,
+                    date: new Date().toISOString()
+                });
+                localStorage.setItem('usersDB', JSON.stringify(usersDB));
+                alert('Ответ отправлен пользователю ' + username);
+            } else {
+                alert('Не удалось определить пользователя для ответа');
+                return;
+            }
+            
+            document.getElementById('inbox-reply').value = '';
+            hideInbox();
         }
 
         // Отправить сообщение от разработчика
