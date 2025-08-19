@@ -109,7 +109,7 @@
         }
     </style>
 </head>
-<body class="light-theme min-h-screen flex flex-col">
+<body class="dark-theme min-h-screen flex flex-col">
     <!-- Главный экран -->
     <div id="main-screen" class="flex flex-col items-center justify-center flex-grow p-4">
         <div class="card p-8 max-w-2xl w-full text-center shadow-2xl">
@@ -202,9 +202,9 @@
                 <button id="messages-toggle" class="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white" title="Общаться с наставником">
                     <i class="fas fa-comments"></i>
                 </button>
-                <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                    <i class="fas fa-moon text-gray-600 dark:hidden"></i>
-                    <i class="fas fa-sun text-yellow-400 hidden dark:block"></i>
+                <button id="theme-toggle" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors">
+                    <i class="fas fa-sun text-yellow-400"></i>
+                    <i class="fas fa-moon text-gray-300 hidden"></i>
                 </button>
                 <button id="logout-btn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded">Выйти</button>
             </div>
@@ -470,12 +470,8 @@
 
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
-            // Проверяем, есть ли сохраненная тема
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.remove('light-theme');
-                document.body.classList.add('dark-theme');
-            }
+            // Устанавливаем темную тему по умолчанию
+            localStorage.setItem('theme', 'dark');
 
             // Инициализация кнопок
             initButtons();
@@ -623,11 +619,9 @@
                 messages: [],
                 energyHistory: [],
                 moodHistory: [],
-                registrationDate: new Date().toISOString()
+                registrationDate: new Date().toISOString(),
+                lastActivity: new Date().toISOString()
             };
-            
-            // Обновляем дату последней активности
-            user.lastActivity = new Date().toISOString();
             
             // Сохраняем в локальное хранилище
             localStorage.setItem('usersDB', JSON.stringify(usersDB));
@@ -1304,14 +1298,23 @@
 
         // Переключение темы
         function toggleTheme() {
-            if (document.body.classList.contains('light-theme')) {
-                document.body.classList.remove('light-theme');
-                document.body.classList.add('dark-theme');
-                localStorage.setItem('theme', 'dark');
-            } else {
+            const themeToggle = document.getElementById('theme-toggle');
+            if (document.body.classList.contains('dark-theme')) {
                 document.body.classList.remove('dark-theme');
                 document.body.classList.add('light-theme');
                 localStorage.setItem('theme', 'light');
+                themeToggle.querySelector('.fa-sun').classList.add('hidden');
+                themeToggle.querySelector('.fa-moon').classList.remove('hidden');
+                themeToggle.classList.remove('bg-gray-700', 'hover:bg-gray-600');
+                themeToggle.classList.add('bg-gray-100', 'hover:bg-gray-200');
+            } else {
+                document.body.classList.remove('light-theme');
+                document.body.classList.add('dark-theme');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.querySelector('.fa-moon').classList.add('hidden');
+                themeToggle.querySelector('.fa-sun').classList.remove('hidden');
+                themeToggle.classList.remove('bg-gray-100', 'hover:bg-gray-200');
+                themeToggle.classList.add('bg-gray-700', 'hover:bg-gray-600');
             }
         }
     </script>
