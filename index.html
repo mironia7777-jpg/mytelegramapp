@@ -3,1282 +3,1024 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Создай свою реальность</title>
+    <title>Хватит дрочить - стань воином</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-        
+        :root {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --accent: #4361ee;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dark-theme {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --text-primary: #f8f9fa;
+            --text-secondary: #adb5bd;
+            --accent: #4895ef;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+        }
+
         body {
-            font-family: 'Share Tech Mono', monospace;
-            overflow-x: hidden;
-            color: #00ff41;
-            background-color: #000;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: var(--transition);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-        
-        .matrix-text {
-            text-shadow: 0 0 5px #00ff41;
+
+        .card {
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
-        
-        .matrix-border {
-            border: 1px solid #00ff41;
-            box-shadow: 0 0 10px #00ff41;
+
+        .dark-theme .card {
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        
-        .rain {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        .drop {
-            position: absolute;
-            width: 1px;
-            background: #00ff41;
-            animation: fall linear infinite;
-        }
-        
-        @keyframes fall {
-            to {
-                transform: translateY(100vh);
-            }
-        }
-        
-        .btn-matrix {
-            background: transparent;
-            color: #00ff41;
-            border: 1px solid #00ff41;
-            padding: 15px 30px;
-            font-size: 18px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
-        
-        .btn-matrix:hover {
-            box-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
-            text-shadow: 0 0 5px #00ff41;
-        }
-        
-        .btn-matrix::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.4), transparent);
-            transition: all 0.5s;
-        }
-        
-        .btn-matrix:hover::before {
-            left: 100%;
-        }
-        
-        .sphere-btn {
-            transition: all 0.3s;
-            border-radius: 50%;
-            display: flex;
+
+        .btn {
+            border-radius: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            cursor: pointer;
+            gap: 8px;
         }
-        
-        .sphere-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 15px #00ff41;
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
         }
-        
-        .character-container {
-            width: 300px;
-            height: 400px;
-            margin: 0 auto;
-            position: relative;
+
+        .btn-primary:hover {
+            background-color: #3a56e8;
+            transform: translateY(-1px);
         }
-        
-        .progress-level {
-            height: 20px;
-            background: #111;
-            border: 1px solid #00ff41;
-            position: relative;
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
         }
-        
-        .progress-level::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .input-field {
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .input-field:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .progress-bar-fill {
             height: 100%;
-            background: #00ff41;
-            width: var(--progress);
+            border-radius: 4px;
+            background-color: var(--accent);
+            transition: width 0.5s ease;
         }
-        
-        .habit-tracker .habit-item {
-            border-bottom: 1px dashed #00ff41;
-            padding: 10px 0;
-        }
-        
-        .habit-tracker .habit-checkbox {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 1px solid #00ff41;
-            background: transparent;
-            cursor: pointer;
-            position: relative;
-        }
-        
-        .habit-tracker .habit-checkbox:checked::before {
-            content: '✓';
-            position: absolute;
-            color: #00ff41;
-            font-size: 16px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        
-        .task-item.completed {
-            text-decoration: line-through;
-            color: #666;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-        
-        .modal-content {
-            background-color: #000;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #00ff41;
-            width: 80%;
-            max-width: 800px;
-            position: relative;
-        }
-        
-        .close {
-            color: #00ff41;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        
-        .close:hover {
-            color: #fff;
-        }
-        
-        #vanta-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
-<body>
-    <div id="vanta-canvas"></div>
-    <div id="rain" class="rain"></div>
-    
-    <!-- Главная страница -->
-    <div id="main-page" class="min-h-screen flex flex-col items-center justify-center p-4">
-        <div class="text-center mb-12">
-            <h1 class="text-4xl md:text-6xl font-bold mb-6 matrix-text">ПРИШЛО ВРЕМЯ СОЗДАТЬ СВОЮ ЛУЧШУЮ РЕАЛЬНОСТЬ</h1>
-            <p class="text-xl md:text-2xl mb-8 matrix-text">Начни свой путь к идеальной жизни прямо сейчас</p>
+<body class="light-theme min-h-screen flex flex-col">
+    <!-- Главный экран -->
+    <div id="main-screen" class="flex flex-col items-center justify-center flex-grow p-4">
+        <div class="card p-8 max-w-2xl w-full text-center shadow-2xl">
+            <h1 class="text-4xl md:text-5xl font-bold mb-8 text-accent">ХВАТИТ ДРОЧИТЬ - СТАНЬ ВОИНОМ</h1>
+            <div class="flex space-x-4 justify-center mb-8">
+            <button id="login-btn" class="btn btn-primary px-6 py-3">
+                <i class="fas fa-sign-in-alt"></i> Войти
+            </button>
+            <button id="register-btn" class="btn px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
+                <i class="fas fa-user-plus"></i> Регистрация
+            </button>
         </div>
-        
-        <button id="login-btn" class="btn-matrix mb-8 animate-pulse">
-            ВОЙТИ
-        </button>
-        
-        <button id="dev-login-btn" class="text-xs text-gray-400 hover:text-gray-200">
-            Вход для разработчика
-        </button>
+            </div>
+            <div class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                Пройди 31-дневный челлендж и измени свою жизнь
+            </div>
+        </div>
+        <div class="absolute bottom-4 right-4">
+            <button id="dev-btn" class="p-2 bg-gray-800 text-white rounded-full shadow-lg">
+                <i class="fas fa-code"></i>
+            </button>
+        </div>
     </div>
-    
-    <!-- Модальное окно входа -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 class="text-2xl mb-6 text-center matrix-text">ВХОД В СИСТЕМУ</h2>
-            
+
+    <!-- Форма входа -->
+    <div id="login-form" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="card rounded-lg p-6 w-full max-w-md">
+            <h2 class="text-2xl font-bold mb-4">Вход</h2>
             <div class="mb-4">
-                <label class="block mb-2">Никнейм:</label>
-                <input type="text" id="login-username" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
+                <label class="block mb-2">Логин</label>
+                <input type="text" id="login-username" class="input-field w-full p-3">
             </div>
-            
             <div class="mb-6">
-                <label class="block mb-2">Пароль:</label>
-                <input type="password" id="login-password" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
+                <label class="block mb-2">Пароль</label>
+                <input type="password" id="login-password" class="w-full p-2 border rounded text-black">
             </div>
-            
-            <button id="submit-login" class="btn-matrix w-full mb-4">ВОЙТИ</button>
-            
-            <p class="text-center mb-2">Нет аккаунта?</p>
-            <button id="show-register" class="text-green-400 hover:text-white w-full text-center">Зарегистрироваться</button>
+            <div class="flex justify-between">
+                <button id="login-submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Войти</button>
+                <button id="login-cancel" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded">Отмена</button>
+            </div>
         </div>
     </div>
-    
-    <!-- Модальное окно регистрации -->
-    <div id="register-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 class="text-2xl mb-6 text-center matrix-text">РЕГИСТРАЦИЯ</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="block mb-2">Никнейм:</label>
-                    <input type="text" id="reg-username" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
-                </div>
-                
-                <div>
-                    <label class="block mb-2">Пароль:</label>
-                    <input type="password" id="reg-password" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
-                </div>
+
+    <!-- Форма регистрации -->
+    <div id="register-form" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="card rounded-lg p-6 w-full max-w-md">
+            <h2 class="text-2xl font-bold mb-4">Регистрация</h2>
+            <div class="mb-4">
+                <label class="block mb-2">Логин</label>
+                <input type="text" id="register-username" class="w-full p-2 border rounded text-black">
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="block mb-2">Имя:</label>
-                    <input type="text" id="reg-name" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
-                </div>
-                
-                <div>
-                    <label class="block mb-2">Возраст:</label>
-                    <input type="number" id="reg-age" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
-                </div>
+            <div class="mb-4">
+                <label class="block mb-2">Пароль</label>
+                <input type="password" id="register-password" class="w-full p-2 border rounded text-black">
             </div>
-            
             <div class="mb-6">
-                <label class="block mb-2">Пол:</label>
-                <div class="flex space-x-4">
-                    <label class="flex items-center">
-                        <input type="radio" name="gender" value="male" class="mr-2" checked>
-                        Мужской
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="gender" value="female" class="mr-2">
-                        Женский
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="gender" value="other" class="mr-2">
-                        Другой
-                    </label>
-                </div>
+                <label class="block mb-2">Подтвердите пароль</label>
+                <input type="password" id="register-confirm" class="w-full p-2 border rounded text-black">
             </div>
-            
-            <button id="submit-register" class="btn-matrix w-full mb-4">ЗАРЕГИСТРИРОВАТЬСЯ</button>
-            
-            <p class="text-center mb-2">Уже есть аккаунт?</p>
-            <button id="show-login" class="text-green-400 hover:text-white w-full text-center">Войти</button>
+            <div class="flex justify-between">
+                <button id="register-submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Зарегистрироваться</button>
+                <button id="register-cancel" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded">Отмена</button>
+            </div>
         </div>
     </div>
-    
-    <!-- Модальное окно разработчика -->
-    <div id="dev-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 class="text-2xl mb-6 text-center matrix-text">ВХОД ДЛЯ РАЗРАБОТЧИКА</h2>
-            
+
+    <!-- Вход разработчика -->
+    <div id="dev-login" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="card rounded-lg p-6 w-full max-w-md">
+            <h2 class="text-2xl font-bold mb-4">Вход разработчика</h2>
             <div class="mb-6">
-                <label class="block mb-2">Пароль:</label>
-                <input type="password" id="dev-password" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
+                <label class="block mb-2">Пароль</label>
+                <input type="password" id="dev-password" class="w-full p-2 border rounded text-black">
             </div>
-            
-            <button id="submit-dev" class="btn-matrix w-full mb-4">ПОДТВЕРДИТЬ</button>
-        </div>
-    </div>
-    
-    <!-- База данных пользователей (видна только разработчику) -->
-    <div id="user-database" class="hidden min-h-screen p-8">
-        <h2 class="text-3xl mb-8 text-center matrix-text">БАЗА ДАННЫХ ПОЛЬЗОВАТЕЛЕЙ</h2>
-        
-        <div class="overflow-x-auto">
-            <table class="w-full border-collapse border border-green-400">
-                <thead>
-                    <tr class="border-b border-green-400">
-                        <th class="p-3 text-left">ID</th>
-                        <th class="p-3 text-left">Никнейм</th>
-                        <th class="p-3 text-left">Имя</th>
-                        <th class="p-3 text-left">Возраст</th>
-                        <th class="p-3 text-left">Пол</th>
-                        <th class="p-3 text-left">Пароль</th>
-                        <th class="p-3 text-left">Уровень</th>
-                        <th class="p-3 text-left">Очки</th>
-                    </tr>
-                </thead>
-                <tbody id="user-table-body">
-                    <!-- Данные будут добавлены через JS -->
-                </tbody>
-            </table>
-        </div>
-        
-        <button id="back-to-main" class="btn-matrix mt-8">НАЗАД</button>
-    </div>
-    
-    <!-- Личный кабинет пользователя -->
-    <div id="user-dashboard" class="hidden min-h-screen p-4 md:p-8">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl md:text-3xl matrix-text">МОЯ РЕАЛЬНОСТЬ</h2>
-            <div class="flex items-center space-x-4">
-                <span id="user-level" class="text-xl">Уровень: 1</span>
-                <span id="user-points" class="text-xl">Очки: 0</span>
-                <button id="profile-btn" class="btn-matrix px-4 py-2">Мой профиль</button>
-                <button id="logout-btn" class="btn-matrix px-4 py-2">Выйти</button>
-            </div>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <!-- Мотивация дня -->
-            <div class="matrix-border p-6">
-                <h3 class="text-xl mb-4 matrix-text">МОТИВАЦИЯ ДНЯ</h3>
-                <p id="daily-motivation" class="mb-4">Сегодня твой день! Сделай хотя бы один шаг к своей мечте, и ты будешь на шаг ближе к цели.</p>
-                <button id="new-motivation" class="btn-matrix px-4 py-2 text-sm">Новая мотивация</button>
-            </div>
-            
-            <!-- Календарь -->
-            <div class="matrix-border p-6">
-                <h3 class="text-xl mb-4 matrix-text">КАЛЕНДАРЬ</h3>
-                <div id="calendar" class="mb-4">
-                    <!-- Календарь будет добавлен через JS -->
-                </div>
-                <button id="add-event" class="btn-matrix px-4 py-2 text-sm">Добавить событие</button>
-            </div>
-            
-            <!-- Прогресс -->
-            <div class="matrix-border p-6">
-                <h3 class="text-xl mb-4 matrix-text">МОЙ ПРОГРЕСС</h3>
-                <div class="progress-level mb-2" style="--progress: 10%"></div>
-                <p>Заполненность профиля: 10%</p>
-            </div>
-        </div>
-        
-        <!-- Сферы жизни -->
-        <h3 class="text-2xl mb-6 matrix-text">СФЕРЫ ЖИЗНИ</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-            <!-- Сферы будут добавлены через JS -->
-        </div>
-        
-        <!-- Дневник и трекер привычек -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <!-- Дневник -->
-            <div class="matrix-border p-6">
-                <h3 class="text-xl mb-4 matrix-text">ДНЕВНИК</h3>
-                <textarea id="diary-entry" class="w-full h-40 p-3 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400 mb-4" placeholder="Опиши свой день..."></textarea>
-                <button id="save-diary" class="btn-matrix px-4 py-2">СОХРАНИТЬ</button>
-            </div>
-            
-            <!-- Трекер привычек -->
-            <div class="matrix-border p-6">
-                <h3 class="text-xl mb-4 matrix-text">ТРЕКЕР ПРИВЫЧЕК</h3>
-                <div class="habit-tracker mb-4">
-                    <!-- Привычки будут добавлены через JS -->
-                </div>
-                <button id="add-habit" class="btn-matrix px-4 py-2 text-sm mr-2">+ Привычка</button>
-                <button id="add-task" class="btn-matrix px-4 py-2 text-sm">+ Задача</button>
-            </div>
-        </div>
-        
-        <!-- Точка А и точка Б -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <div class="matrix-border p-6">
-                <h3 class="text-xl mb-4 matrix-text">ТОЧКА А</h3>
-                <p class="mb-4">Где я сейчас?</p>
-                <textarea id="point-a" class="w-full h-40 p-3 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400 mb-4" placeholder="Опиши свою текущую реальность..."></textarea>
-                <button id="save-point-a" class="btn-matrix px-4 py-2">СОХРАНИТЬ</button>
-            </div>
-            
-            <div class="matrix-border p-6">
-                <h3 class="text-xl mb-4 matrix-text">ТОЧКА Б</h3>
-                <p class="mb-4">Куда я иду?</p>
-                <textarea id="point-b" class="w-full h-40 p-3 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400 mb-4" placeholder="Опиши свою желаемую реальность..."></textarea>
-                <button id="save-point-b" class="btn-matrix px-4 py-2">СОХРАНИТЬ</button>
+            <div class="flex justify-between">
+                <button id="dev-submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Войти</button>
+                <button id="dev-cancel" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded">Отмена</button>
             </div>
         </div>
     </div>
-    
-    <!-- Профиль пользователя с 3D персонажем -->
-    <div id="user-profile" class="hidden min-h-screen p-8">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-3xl matrix-text">МОЙ ПРОФИЛЬ</h2>
-            <button id="back-to-dashboard" class="btn-matrix px-4 py-2">НАЗАД</button>
+
+    <!-- Панель пользователя -->
+    <div id="user-panel" class="hidden flex-grow p-4">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 id="user-greeting" class="text-2xl font-bold"></h2>
+                <div id="user-stats" class="text-lg"></div>
+            </div>
+            <div class="flex space-x-2">
+                <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                    <i class="fas fa-moon text-gray-600 dark:hidden"></i>
+                    <i class="fas fa-sun text-yellow-400 hidden dark:block"></i>
+                </button>
+                <button id="logout-btn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded">Выйти</button>
+            </div>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="matrix-border p-6">
-                <h3 class="text-xl mb-4 matrix-text">ИНФОРМАЦИЯ</h3>
-                
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Трекер дней -->
+            <div class="card rounded-lg p-6">
+                <h3 class="text-xl font-bold mb-4">День <span id="current-day">1</span>/31</h3>
+                <div id="motivation-text" class="mb-4 text-sm"></div>
                 <div class="mb-4">
-                    <label class="block mb-2">Имя:</label>
-                    <input type="text" id="profile-name" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
-                </div>
-                
-                <div class="mb-4">
-                    <label class="block mb-2">Возраст:</label>
-                    <input type="number" id="profile-age" class="w-full p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400">
-                </div>
-                
-                <div class="mb-6">
-                    <label class="block mb-2">Пол:</label>
-                    <div class="flex space-x-4">
-                        <label class="flex items-center">
-                            <input type="radio" name="profile-gender" value="male" class="mr-2">
-                            Мужской
-                        </label>
-                        <label class="flex items-center">
-                            <input type="radio" name="profile-gender" value="female" class="mr-2">
-                            Женский
-                        </label>
-                        <label class="flex items-center">
-                            <input type="radio" name="profile-gender" value="other" class="mr-2">
-                            Другой
-                        </label>
+                    <label class="block mb-2">Энергия сегодня (1-10)</label>
+                    <input type="range" id="energy-level" min="1" max="10" value="5" class="w-full">
+                    <div class="flex justify-between text-xs">
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                        <span>4</span>
+                        <span>5</span>
+                        <span>6</span>
+                        <span>7</span>
+                        <span>8</span>
+                        <span>9</span>
+                        <span>10</span>
                     </div>
                 </div>
-                
-                <button id="save-profile" class="btn-matrix w-full">СОХРАНИТЬ</button>
-            </div>
-            
-            <div class="flex flex-col items-center justify-center">
-                <div class="character-container mb-6" id="character-container">
-                    <!-- 3D персонаж будет здесь -->
-                </div>
-                <div class="text-center">
-                    <h3 id="character-name" class="text-2xl mb-2 matrix-text">ИМЯ</h3>
-                    <p id="character-level" class="text-lg">Уровень: 1</p>
-                </div>
-            </div>
-            
-            <div class="matrix-border p-6">
-                <h3 class="text-xl mb-4 matrix-text">ДОСТИЖЕНИЯ</h3>
                 <div class="mb-4">
-                    <p class="mb-2">Заполненность профиля:</p>
-                    <div class="progress-level mb-2" style="--progress: 10%"></div>
+                    <label class="block mb-2">Настроение сегодня (1-10)</label>
+                    <input type="range" id="mood-level" min="1" max="10" value="5" class="w-full">
+                    <div class="flex justify-between text-xs">
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                        <span>4</span>
+                        <span>5</span>
+                        <span>6</span>
+                        <span>7</span>
+                        <span>8</span>
+                        <span>9</span>
+                        <span>10</span>
+                    </div>
                 </div>
-                
+                <div class="flex space-x-4 mb-4">
+                    <button id="success-btn" class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">
+                        <i class="fas fa-check mr-2"></i> Успех
+                    </button>
+                    <button id="fail-btn" class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded">
+                        <i class="fas fa-times mr-2"></i> Сорвался
+                    </button>
+                </div>
                 <div class="mb-4">
-                    <p class="mb-2">Последние достижения:</p>
-                    <ul class="list-disc pl-5">
-                        <li>Регистрация в системе</li>
-                    </ul>
+                    <label class="block mb-2">Заметки на сегодня</label>
+                    <textarea id="daily-notes" class="w-full p-2 border rounded text-black" rows="3"></textarea>
                 </div>
-                
+                <button id="save-day" class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Сохранить день</button>
+            </div>
+
+            <!-- Статистика -->
+            <div class="card rounded-lg p-6">
+                <h3 class="text-xl font-bold mb-4">Ваша статистика</h3>
+                <div class="mb-4">
+                    <h4 class="font-semibold mb-2">Прогресс</h4>
+                    <div class="progress-bar w-full">
+                        <div id="progress-bar" class="progress-bar-fill" style="width: 0%"></div>
+                    </div>
+                    <div id="progress-text" class="text-sm mt-1">0% завершено</div>
+                </div>
+                <div class="mb-4">
+                    <h4 class="font-semibold mb-2">Средняя энергия</h4>
+                    <div id="avg-energy" class="text-2xl font-bold">0</div>
+                </div>
+                <div class="mb-4">
+                    <h4 class="font-semibold mb-2">Среднее настроение</h4>
+                    <div id="avg-mood" class="text-2xl font-bold">0</div>
+                </div>
+                <div class="mb-4">
+                    <h4 class="font-semibold mb-2">График энергии</h4>
+                    <canvas id="energy-chart" class="w-full h-32"></canvas>
+                </div>
                 <div>
-                    <p class="mb-2">Ближайшие цели:</p>
-                    <ul class="list-disc pl-5">
-                        <li>Заполнить профиль на 50%</li>
-                        <li>Добавить 3 привычки</li>
-                        <li>Определить Точку Б</li>
-                    </ul>
+                    <h4 class="font-semibold mb-2">График настроения</h4>
+                    <canvas id="mood-chart" class="w-full h-32"></canvas>
+                </div>
+            </div>
+
+            <!-- Сообщения и история -->
+            <div class="card rounded-lg p-6">
+                <h3 class="text-xl font-bold mb-4">Сообщения</h3>
+                <div id="messages-container" class="mb-4 max-h-48 overflow-y-auto">
+                    <!-- Сообщения будут здесь -->
+                </div>
+                <div class="mb-4">
+                    <label class="block mb-2">Новое сообщение</label>
+                    <textarea id="new-message" class="w-full p-2 border rounded text-black" rows="2"></textarea>
+                </div>
+                <button id="send-message" class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Отправить</button>
+                
+                <h3 class="text-xl font-bold mt-6 mb-4">История дней</h3>
+                <div id="history-container" class="max-h-48 overflow-y-auto">
+                    <!-- История будет здесь -->
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- Страница сферы жизни -->
-    <div id="life-sphere" class="hidden min-h-screen p-8">
-        <div class="flex justify-between items-center mb-8">
-            <h2 id="sphere-title" class="text-3xl matrix-text">СФЕРА ЖИЗНИ</h2>
-            <button id="back-to-spheres" class="btn-matrix px-4 py-2">НАЗАД</button>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div class="matrix-border p-6">
-                <h3 class="text-xl mb-4 matrix-text">ТЕКУЩЕЕ СОСТОЯНИЕ</h3>
-                <p id="sphere-current" class="mb-4">Опиши текущее состояние этой сферы твоей жизни.</p>
-                <textarea id="sphere-current-text" class="w-full h-40 p-3 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400 mb-4" placeholder="Как обстоят дела в этой сфере?"></textarea>
-                <button id="save-current-state" class="btn-matrix w-full">СОХРАНИТЬ</button>
-            </div>
-            
-            <div class="matrix-border p-6">
-                <h3 class="text-xl mb-4 matrix-text">ЦЕЛИ</h3>
-                <div id="sphere-goals" class="mb-4">
-                    <!-- Цели будут добавлены через JS -->
-                </div>
-                <div class="flex">
-                    <input type="text" id="new-goal" class="flex-grow p-2 bg-black border border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400" placeholder="Новая цель">
-                    <button id="add-goal" class="btn-matrix px-4 py-2 ml-2">+</button>
-                </div>
-            </div>
-            
-            <div class="matrix-border p-6">
-                <h3 class="text-xl mb-4 matrix-text">ПРОГРЕСС</h3>
-                <div class="mb-6">
-                    <p class="mb-2">Уровень развития:</p>
-                    <input type="range" id="sphere-level" min="0" max="10" value="0" class="w-full">
-                    <p id="sphere-level-value" class="text-center">0/10</p>
-                </div>
-                
-                <div>
-                    <p class="mb-2">Действия:</p>
-                    <button id="add-sphere-task" class="btn-matrix px-4 py-2 text-sm mb-2 w-full">Добавить задачу</button>
-                    <button id="add-sphere-habit" class="btn-matrix px-4 py-2 text-sm w-full">Добавить привычку</button>
-                </div>
+
+    <!-- Панель разработчика -->
+    <div id="dev-panel" class="hidden flex-grow p-4">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">Панель разработчика</h2>
+            <div class="flex space-x-2">
+                <button id="theme-toggle-dev" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:block"></i>
+                </button>
+                <button id="dev-logout" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded">Выйти</button>
             </div>
         </div>
-        
-        <div class="matrix-border p-6">
-            <h3 class="text-xl mb-4 matrix-text">ПЛАН ДЕЙСТВИЙ</h3>
-            <div id="sphere-tasks">
-                <!-- Задачи будут добавлены через JS -->
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Список пользователей -->
+            <div class="card rounded-lg p-6">
+                <h3 class="text-xl font-bold mb-4">Пользователи</h3>
+                <div class="mb-4">
+                    <input type="text" id="user-search" placeholder="Поиск пользователей..." class="w-full p-2 border rounded text-black">
+                </div>
+                <div id="users-list" class="max-h-96 overflow-y-auto">
+                    <!-- Список пользователей будет здесь -->
+                </div>
+            </div>
+
+            <!-- Данные пользователя -->
+            <div class="card rounded-lg p-6">
+                <h3 class="text-xl font-bold mb-4">Данные пользователя</h3>
+                <div id="selected-user-info" class="mb-4">
+                    Выберите пользователя слева
+                </div>
+                <div id="user-data-container" class="hidden">
+                    <div class="mb-4">
+                        <h4 class="font-semibold mb-2">Статистика</h4>
+                        <div id="dev-user-stats"></div>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="font-semibold mb-2">История дней</h4>
+                        <div id="dev-user-history" class="max-h-48 overflow-y-auto"></div>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="font-semibold mb-2">Отправить сообщение</h4>
+                        <textarea id="dev-message" class="w-full p-2 border rounded text-black" rows="2"></textarea>
+                        <button id="dev-send-message" class="mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Отправить</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Инициализация базы данных (localStorage)
-        let usersDB = JSON.parse(localStorage.getItem('usersDB')) || [];
+        // Локальное хранилище для пользователей
+        const usersDB = JSON.parse(localStorage.getItem('usersDB')) || {};
+        const DEV_PASSWORD = "78";
+        
+        // Текущий пользователь
         let currentUser = null;
-        let currentSphere = null;
+        let currentDay = 1;
+        let isDevMode = false;
         
-        // Сферы жизни
-        const lifeSpheres = [
-            { id: 'health', name: 'Здоровье', color: '#00ff41', icon: '❤️' },
-            { id: 'finance', name: 'Финансы', color: '#00ff41', icon: '💰' },
-            { id: 'career', name: 'Карьера', color: '#00ff41', icon: '💼' },
-            { id: 'relationships', name: 'Отношения', color: '#00ff41', icon: '👥' },
-            { id: 'personal-growth', name: 'Личностный рост', color: '#00ff41', icon: '📚' },
-            { id: 'hobbies', name: 'Хобби и творчество', color: '#00ff41', icon: '🎨' },
-            { id: 'environment', name: 'Окружение', color: '#00ff41', icon: '🌍' },
-            { id: 'spirituality', name: 'Духовность', color: '#00ff41', icon: '🕊️' }
+        // Мотивационные тексты для каждого дня
+        const motivationTexts = [
+            "Первый день - самый сложный. Помни, что каждый великий путь начинается с первого шага.",
+            "Твой мозг уже начинает восстанавливаться. Продолжай в том же духе!",
+            "После 3 дней воздержания уровень тестостерона начинает расти.",
+            "Через 4 дня уменьшается тревожность и улучшается сон.",
+            "5 дней без порно - и твоя концентрация уже заметно улучшилась.",
+            "Неделя без мастурбации - ты уже чувствуешь прилив энергии?",
+            "7 дней - отличный результат! Твой дофаминовый баланс восстанавливается.",
+            "После 8 дней улучшается качество эрекции и либидо.",
+            "9 дней - твоя уверенность в себе растет с каждым днем.",
+            "Десятый день! Ты уже на трети пути к 30-дневному челленджу.",
+            "11 дней - твой мозг продолжает перестраиваться на здоровые источники удовольствия.",
+            "Две недели без порно - ты замечаешь, как изменилось твое восприятие женщин?",
+            "15 дней - критический момент. Не сдавайся сейчас!",
+            "После 16 дней воздержания многие отмечают повышение творческих способностей.",
+            "17 дней - твоя сила воли становится сильнее с каждым днем.",
+            "18 дней - ты уже преодолел больше половины пути!",
+            "19 дней - твоя энергия продолжает расти. Используй ее продуктивно!",
+            "20 дней - ты уже близок к финишу. Не останавливайся!",
+            "21 день - столько времени нужно, чтобы сформировать новую привычку.",
+            "22 дня - твой мозг почти полностью перестроился.",
+            "23 дня - ты уже чувствуешь себя другим человеком?",
+            "24 дня - осталось совсем немного до полного месяца!",
+            "25 дней - твоя дисциплина впечатляет. Так держать!",
+            "26 дней - ты уже почти у цели. Не сдавайся сейчас!",
+            "27 дней - последний рывок! Ты сможешь!",
+            "28 дней - всего 3 дня осталось до полного месяца!",
+            "29 дней - ты почти у цели. Гордись собой!",
+            "30 дней - это огромное достижение! Ты доказал себе, что можешь все!",
+            "31 день - полный месяц без порно и мастурбации. Ты настоящий воин!"
         ];
-        
-        // Мотивационные цитаты
-        const motivations = [
-            "Сегодня твой день! Сделай хотя бы один шаг к своей мечте, и ты будешь на шаг ближе к цели.",
-            "Успех — это сумма небольших усилий, повторяемых изо дня в день.",
-            "Не откладывай на завтра то, что можно сделать сегодня.",
-            "Ты сильнее, чем думаешь. Прояви себя сегодня!",
-            "Каждый день — это новая возможность изменить свою жизнь.",
-            "Малые шаги каждый день приводят к большим результатам.",
-            "Верь в себя, и у тебя всё получится!",
-            "Сегодняшние усилия — завтрашние победы."
-        ];
-        
-        // Привычки по умолчанию
-        const defaultHabits = [
-            { name: "Утренняя зарядка", checked: false },
-            { name: "Чтение 20 минут", checked: false },
-            { name: "Пить воду", checked: false }
-        ];
-        
-        // Задачи по умолчанию
-        const defaultTasks = [
-            { name: "Заполнить профиль", completed: false },
-            { name: "Определить цели", completed: false }
-        ];
-        
-        // Инициализация Vanta.js (матричный фон)
+
+        // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
-            VANTA.NET({
-                el: "#vanta-canvas",
-                mouseControls: true,
-                touchControls: true,
-                gyroControls: false,
-                minHeight: 200.00,
-                minWidth: 200.00,
-                scale: 1.00,
-                scaleMobile: 1.00,
-                color: 0x00ff41,
-                backgroundColor: 0x0,
-                points: 10.00,
-                maxDistance: 22.00,
-                spacing: 17.00
-            });
+            // Проверяем, есть ли сохраненная тема
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.remove('light-theme');
+                document.body.classList.add('dark-theme');
+            }
+
+            // Инициализация кнопок
+            initButtons();
             
-            // Создаем дождь
-            createRain();
+            // Проверяем, есть ли активный пользователь
+            const activeUser = localStorage.getItem('activeUser');
+            if (activeUser) {
+                currentUser = activeUser;
+                loadUserPanel();
+            }
             
-            // Инициализация календаря
-            initCalendar();
-            
-            // Инициализация сфер жизни
-            initLifeSpheres();
-            
-            // Инициализация 3D персонажа
-            initCharacter();
-            
-            // Назначение обработчиков событий
-            setupEventListeners();
+            // Проверяем, есть ли активный разработчик
+            const activeDev = localStorage.getItem('activeDev');
+            if (activeDev === 'true') {
+                isDevMode = true;
+                loadDevPanel();
+            }
         });
-        
-        function createRain() {
-            const rainContainer = document.getElementById('rain');
-            const dropsCount = 100;
+
+        // Инициализация всех кнопок и событий
+        function initButtons() {
+            // Главный экран
+            document.getElementById('login-btn').addEventListener('click', showLoginForm);
+            document.getElementById('register-btn').addEventListener('click', showRegisterForm);
+            document.getElementById('dev-btn').addEventListener('click', showDevLogin);
             
-            for (let i = 0; i < dropsCount; i++) {
-                const drop = document.createElement('div');
-                drop.className = 'drop';
-                
-                // Случайные параметры для капли
-                const left = Math.random() * 100;
-                const duration = Math.random() * 1 + 0.5;
-                const delay = Math.random() * 2;
-                const height = Math.random() * 20 + 10;
-                
-                drop.style.left = `${left}%`;
-                drop.style.height = `${height}px`;
-                drop.style.animationDuration = `${duration}s`;
-                drop.style.animationDelay = `${delay}s`;
-                
-                rainContainer.appendChild(drop);
-            }
-        }
-        
-        function initCalendar() {
-            const calendar = document.getElementById('calendar');
-            const now = new Date();
-            const month = now.toLocaleString('ru', { month: 'long' });
-            const year = now.getFullYear();
+            // Форма входа
+            document.getElementById('login-submit').addEventListener('click', loginUser);
+            document.getElementById('login-cancel').addEventListener('click', hideLoginForm);
             
-            calendar.innerHTML = `
-                <div class="text-center mb-2">
-                    <h4 class="text-lg">${month} ${year}</h4>
-                </div>
-                <div class="grid grid-cols-7 gap-1 text-center">
-                    <div class="text-sm">Пн</div>
-                    <div class="text-sm">Вт</div>
-                    <div class="text-sm">Ср</div>
-                    <div class="text-sm">Чт</div>
-                    <div class="text-sm">Пт</div>
-                    <div class="text-sm">Сб</div>
-                    <div class="text-sm">Вс</div>
-                    
-                    ${generateCalendarDays(now)}
-                </div>
-            `;
-        }
-        
-        function generateCalendarDays(date) {
-            const year = date.getFullYear();
-            const month = date.getMonth();
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            // Форма регистрации
+            document.getElementById('register-submit').addEventListener('click', registerUser);
+            document.getElementById('register-cancel').addEventListener('click', hideRegisterForm);
             
-            // Корректировка для понедельника как первого дня недели
-            const firstDayIndex = firstDay === 0 ? 6 : firstDay - 1;
+            // Вход разработчика
+            document.getElementById('dev-submit').addEventListener('click', loginDev);
+            document.getElementById('dev-cancel').addEventListener('click', hideDevLogin);
             
-            let daysHtml = '';
-            
-            // Пустые ячейки перед первым днем месяца
-            for (let i = 0; i < firstDayIndex; i++) {
-                daysHtml += '<div class="h-8"></div>';
-            }
-            
-            // Дни месяца
-            for (let i = 1; i <= daysInMonth; i++) {
-                const isToday = i === date.getDate() && month === new Date().getMonth() && year === new Date().getFullYear();
-                daysHtml += `
-                    <div class="h-8 flex items-center justify-center ${isToday ? 'bg-green-400 text-black' : ''}">
-                        ${i}
-                    </div>
-                `;
-            }
-            
-            return daysHtml;
-        }
-        
-        function initLifeSpheres() {
-            const spheresContainer = document.querySelector('#user-dashboard .grid.grid-cols-2.md\\:grid-cols-4.gap-6');
-            
-            lifeSpheres.forEach(sphere => {
-                const sphereElement = document.createElement('div');
-                sphereElement.className = 'sphere-btn matrix-border flex flex-col items-center justify-center p-4 cursor-pointer';
-                sphereElement.style.borderColor = sphere.color;
-                sphereElement.dataset.sphereId = sphere.id;
-                
-                sphereElement.innerHTML = `
-                    <span class="text-3xl mb-2">${sphere.icon}</span>
-                    <h4 class="text-center">${sphere.name}</h4>
-                    <div class="mt-2 w-full bg-gray-800 rounded-full h-2.5">
-                        <div class="bg-green-400 h-2.5 rounded-full" style="width: 0%"></div>
-                    </div>
-                `;
-                
-                spheresContainer.appendChild(sphereElement);
-            });
-        }
-        
-        function initCharacter() {
-            const container = document.getElementById('character-container');
-            
-            // Простая реализация 3D персонажа с Three.js
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, 300 / 400, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setSize(300, 400);
-            container.appendChild(renderer.domElement);
-            
-            // Освещение
-            const light = new THREE.AmbientLight(0x00ff41, 0.5);
-            scene.add(light);
-            
-            const directionalLight = new THREE.DirectionalLight(0x00ff41, 0.8);
-            directionalLight.position.set(0, 1, 1);
-            scene.add(directionalLight);
-            
-            // Создаем базовую модель персонажа (куб для примера)
-            const geometry = new THREE.BoxGeometry(1, 1, 1);
-            const material = new THREE.MeshPhongMaterial({ 
-                color: 0x00ff41,
-                emissive: 0x003300,
-                specular: 0x00ff00,
-                shininess: 30,
-                wireframe: true
-            });
-            
-            const cube = new THREE.Mesh(geometry, material);
-            scene.add(cube);
-            
-            camera.position.z = 2;
-            
-            // Анимация
-            function animate() {
-                requestAnimationFrame(animate);
-                cube.rotation.x += 0.01;
-                cube.rotation.y += 0.01;
-                renderer.render(scene, camera);
-            }
-            
-            animate();
-        }
-        
-        function setupEventListeners() {
-            // Главная страница
-            document.getElementById('login-btn').addEventListener('click', () => {
-                document.getElementById('login-modal').style.display = 'block';
-            });
-            
-            document.getElementById('dev-login-btn').addEventListener('click', () => {
-                document.getElementById('dev-modal').style.display = 'block';
-            });
-            
-            // Модальные окна
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                modal.querySelector('.close').addEventListener('click', () => {
-                    modal.style.display = 'none';
-                });
-            });
-            
-            // Переключение между входом и регистрацией
-            document.getElementById('show-register').addEventListener('click', () => {
-                document.getElementById('login-modal').style.display = 'none';
-                document.getElementById('register-modal').style.display = 'block';
-            });
-            
-            document.getElementById('show-login').addEventListener('click', () => {
-                document.getElementById('register-modal').style.display = 'none';
-                document.getElementById('login-modal').style.display = 'block';
-            });
-            
-            // Вход
-            document.getElementById('submit-login').addEventListener('click', loginUser);
-            
-            // Регистрация
-            document.getElementById('submit-register').addEventListener('click', registerUser);
-            
-            // Вход для разработчика
-            document.getElementById('submit-dev').addEventListener('click', () => {
-                const password = document.getElementById('dev-password').value;
-                
-                if (password === '78') {
-                    document.getElementById('dev-modal').style.display = 'none';
-                    showUserDatabase();
-                } else {
-                    alert('Неверный пароль разработчика');
-                }
-            });
-            
-            // Назад из базы данных
-            document.getElementById('back-to-main').addEventListener('click', () => {
-                document.getElementById('user-database').classList.add('hidden');
-                document.getElementById('main-page').classList.remove('hidden');
-            });
-            
-            // Личный кабинет
-            document.getElementById('profile-btn').addEventListener('click', showUserProfile);
+            // Панель пользователя
             document.getElementById('logout-btn').addEventListener('click', logoutUser);
-            document.getElementById('back-to-dashboard').addEventListener('click', () => {
-                document.getElementById('user-profile').classList.add('hidden');
-                document.getElementById('user-dashboard').classList.remove('hidden');
-            });
+            document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+            document.getElementById('success-btn').addEventListener('click', markDayAsSuccess);
+            document.getElementById('fail-btn').addEventListener('click', markDayAsFail);
+            document.getElementById('save-day').addEventListener('click', saveDay);
+            document.getElementById('send-message').addEventListener('click', sendUserMessage);
             
-            // Новая мотивация
-            document.getElementById('new-motivation').addEventListener('click', () => {
-                const randomMotivation = motivations[Math.floor(Math.random() * motivations.length)];
-                document.getElementById('daily-motivation').textContent = randomMotivation;
-            });
-            
-            // Сохранение дневника
-            document.getElementById('save-diary').addEventListener('click', saveDiary);
-            
-            // Точки А и Б
-            document.getElementById('save-point-a').addEventListener('click', savePointA);
-            document.getElementById('save-point-b').addEventListener('click', savePointB);
-            
-            // Привычки и задачи
-            document.getElementById('add-habit').addEventListener('click', addNewHabit);
-            document.getElementById('add-task').addEventListener('click', addNewTask);
-            
-            // Сферы жизни
-            document.querySelectorAll('.sphere-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const sphereId = this.dataset.sphereId;
-                    showLifeSphere(sphereId);
-                });
-            });
-            
-            // Назад из сферы жизни
-            document.getElementById('back-to-spheres').addEventListener('click', () => {
-                document.getElementById('life-sphere').classList.add('hidden');
-                document.getElementById('user-dashboard').classList.remove('hidden');
-            });
-            
-            // Уровень сферы жизни
-            document.getElementById('sphere-level').addEventListener('input', function() {
-                document.getElementById('sphere-level-value').textContent = `${this.value}/10`;
-            });
-            
-            // Цели в сфере жизни
-            document.getElementById('add-goal').addEventListener('click', addSphereGoal);
+            // Панель разработчика
+            document.getElementById('dev-logout').addEventListener('click', logoutDev);
+            document.getElementById('theme-toggle-dev').addEventListener('click', toggleTheme);
+            document.getElementById('user-search').addEventListener('input', searchUsers);
+            document.getElementById('dev-send-message').addEventListener('click', sendDevMessage);
         }
-        
+
+        // Показать/скрыть формы
+        function showLoginForm() {
+            document.getElementById('login-form').classList.remove('hidden');
+        }
+
+        function hideLoginForm() {
+            document.getElementById('login-form').classList.add('hidden');
+        }
+
+        function showRegisterForm() {
+            document.getElementById('register-form').classList.remove('hidden');
+        }
+
+        function hideRegisterForm() {
+            document.getElementById('register-form').classList.add('hidden');
+        }
+
+        function showDevLogin() {
+            document.getElementById('dev-login').classList.remove('hidden');
+        }
+
+        function hideDevLogin() {
+            document.getElementById('dev-login').classList.add('hidden');
+        }
+
+        // Вход пользователя
         function loginUser() {
-            const username = document.getElementById('login-username').value;
-            const password = document.getElementById('login-password').value;
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value.trim();
             
-            const user = usersDB.find(u => u.username === username && u.password === password);
-            
-            if (user) {
-                currentUser = user;
-                document.getElementById('login-modal').style.display = 'none';
-                showUserDashboard();
-            } else {
-                alert('Неверный никнейм или пароль');
-            }
-        }
-        
-        function registerUser() {
-            const username = document.getElementById('reg-username').value;
-            const password = document.getElementById('reg-password').value;
-            const name = document.getElementById('reg-name').value;
-            const age = document.getElementById('reg-age').value;
-            const gender = document.querySelector('input[name="gender"]:checked').value;
-            
-            // Проверка на существующего пользователя
-            if (usersDB.some(u => u.username === username)) {
-                alert('Пользователь с таким никнеймом уже существует');
+            if (!username || !password) {
+                alert('Пожалуйста, заполните все поля');
                 return;
             }
             
-            // Создание нового пользователя
-            const newUser = {
-                id: Date.now().toString(),
-                username,
-                password,
-                name,
-                age,
-                gender,
-                level: 1,
-                points: 0,
-                spheres: lifeSpheres.map(sphere => ({
-                    id: sphere.id,
-                    level: 0,
-                    currentState: '',
-                    goals: [],
-                    tasks: []
-                })),
-                habits: defaultHabits,
-                tasks: defaultTasks,
-                pointA: '',
-                pointB: '',
-                diary: [],
-                lastLogin: new Date().toISOString()
+            if (!usersDB[username]) {
+                alert('Пользователь не найден');
+                return;
+            }
+            
+            if (usersDB[username].password !== password) {
+                alert('Неверный пароль');
+                return;
+            }
+            
+            currentUser = username;
+            localStorage.setItem('activeUser', username);
+            hideLoginForm();
+            loadUserPanel();
+        }
+
+        // Регистрация пользователя
+        function registerUser() {
+            const username = document.getElementById('register-username').value.trim();
+            const password = document.getElementById('register-password').value.trim();
+            const confirm = document.getElementById('register-confirm').value.trim();
+            
+            if (!username || !password || !confirm) {
+                alert('Пожалуйста, заполните все поля');
+                return;
+            }
+            
+            if (password !== confirm) {
+                alert('Пароли не совпадают');
+                return;
+            }
+            
+            if (usersDB[username]) {
+                alert('Пользователь с таким именем уже существует');
+                return;
+            }
+            
+            // Создаем нового пользователя
+            usersDB[username] = {
+                password: password,
+                stats: {
+                    successDays: 0,
+                    failDays: 0,
+                    currentStreak: 0,
+                    longestStreak: 0
+                },
+                days: {},
+                messages: [],
+                energyHistory: [],
+                moodHistory: []
             };
             
-            usersDB.push(newUser);
+            // Сохраняем в локальное хранилище
             localStorage.setItem('usersDB', JSON.stringify(usersDB));
             
-            currentUser = newUser;
-            document.getElementById('register-modal').style.display = 'none';
-            showUserDashboard();
+            alert('Регистрация успешна! Теперь вы можете войти.');
+            hideRegisterForm();
         }
-        
+
+        // Вход разработчика
+        function loginDev() {
+            const password = document.getElementById('dev-password').value.trim();
+            
+            if (password !== DEV_PASSWORD) {
+                alert('Неверный пароль разработчика');
+                return;
+            }
+            
+            isDevMode = true;
+            localStorage.setItem('activeDev', 'true');
+            hideDevLogin();
+            loadDevPanel();
+        }
+
+        // Выход пользователя
         function logoutUser() {
             currentUser = null;
-            document.getElementById('user-dashboard').classList.add('hidden');
-            document.getElementById('main-page').classList.remove('hidden');
+            localStorage.removeItem('activeUser');
+            document.getElementById('user-panel').classList.add('hidden');
+            document.getElementById('main-screen').classList.remove('hidden');
         }
-        
-        function showUserDashboard() {
-            document.getElementById('main-page').classList.add('hidden');
-            document.getElementById('user-dashboard').classList.remove('hidden');
-            
-            // Обновляем информацию пользователя
-            document.getElementById('user-level').textContent = `Уровень: ${currentUser.level}`;
-            document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
-            
-            // Загружаем привычки
-            loadHabits();
-            
-            // Загружаем задачи
-            loadTasks();
+
+        // Выход разработчика
+        function logoutDev() {
+            isDevMode = false;
+            localStorage.removeItem('activeDev');
+            document.getElementById('dev-panel').classList.add('hidden');
+            document.getElementById('main-screen').classList.remove('hidden');
         }
-        
-        function showUserProfile() {
-            document.getElementById('user-dashboard').classList.add('hidden');
-            document.getElementById('user-profile').classList.remove('hidden');
+
+        // Загрузка панели пользователя
+        function loadUserPanel() {
+            document.getElementById('main-screen').classList.add('hidden');
+            document.getElementById('user-panel').classList.remove('hidden');
             
-            // Заполняем данные профиля
-            document.getElementById('profile-name').value = currentUser.name || '';
-            document.getElementById('profile-age').value = currentUser.age || '';
+            const user = usersDB[currentUser];
             
-            const genderRadios = document.getElementsByName('profile-gender');
-            for (let radio of genderRadios) {
-                if (radio.value === currentUser.gender) {
-                    radio.checked = true;
-                    break;
+            // Приветствие и статистика
+            document.getElementById('user-greeting').textContent = `Привет, ${currentUser}!`;
+            document.getElementById('user-stats').innerHTML = `
+                Успешных дней: <span class="text-green-500">${user.stats.successDays}</span> |
+                Срывов: <span class="text-red-500">${user.stats.failDays}</span> |
+                Текущая серия: <span class="text-blue-500">${user.stats.currentStreak}</span>
+            `;
+            
+            // Определяем текущий день
+            const lastDay = Math.max(...Object.keys(user.days).map(Number).filter(Number.isInteger), 0);
+            currentDay = lastDay < 31 ? lastDay + 1 : 31;
+            
+            // Если день уже был начат, загружаем данные
+            if (user.days[currentDay]) {
+                document.getElementById('energy-level').value = user.days[currentDay].energy || 5;
+                document.getElementById('mood-level').value = user.days[currentDay].mood || 5;
+                document.getElementById('daily-notes').value = user.days[currentDay].notes || '';
+                
+                if (user.days[currentDay].status === 'success') {
+                    document.getElementById('success-btn').classList.add('bg-green-700');
+                } else if (user.days[currentDay].status === 'fail') {
+                    document.getElementById('fail-btn').classList.add('bg-red-700');
                 }
             }
             
-            // Обновляем информацию персонажа
-            document.getElementById('character-name').textContent = currentUser.name || 'ИМЯ';
-            document.getElementById('character-level').textContent = `Уровень: ${currentUser.level}`;
+            document.getElementById('current-day').textContent = currentDay;
+            document.getElementById('motivation-text').textContent = motivationTexts[currentDay - 1] || motivationTexts[motivationTexts.length - 1];
+            
+            // Обновляем статистику
+            updateUserStats();
+            
+            // Загружаем сообщения
+            loadUserMessages();
+            
+            // Загружаем историю
+            loadUserHistory();
         }
-        
-        function showUserDatabase() {
-            document.getElementById('main-page').classList.add('hidden');
-            document.getElementById('user-database').classList.remove('hidden');
+
+        // Загрузка панели разработчика
+        function loadDevPanel() {
+            document.getElementById('main-screen').classList.add('hidden');
+            document.getElementById('dev-panel').classList.remove('hidden');
             
-            const tableBody = document.getElementById('user-table-body');
-            tableBody.innerHTML = '';
+            // Загружаем список пользователей
+            loadUsersList();
+        }
+
+        // Загрузка списка пользователей
+        function loadUsersList() {
+            const usersList = document.getElementById('users-list');
+            usersList.innerHTML = '';
             
-            usersDB.forEach(user => {
-                const row = document.createElement('tr');
-                row.className = 'border-b border-green-400';
-                
-                row.innerHTML = `
-                    <td class="p-3">${user.id}</td>
-                    <td class="p-3">${user.username}</td>
-                    <td class="p-3">${user.name || '-'}</td>
-                    <td class="p-3">${user.age || '-'}</td>
-                    <td class="p-3">${getGenderName(user.gender)}</td>
-                    <td class="p-3">${user.password}</td>
-                    <td class="p-3">${user.level}</td>
-                    <td class="p-3">${user.points}</td>
+            for (const username in usersDB) {
+                const user = usersDB[username];
+                const userElement = document.createElement('div');
+                userElement.className = 'p-3 border-b cursor-pointer hover:bg-gray-700';
+                userElement.innerHTML = `
+                    <div class="font-semibold">${username}</div>
+                    <div class="text-sm">
+                        Успешных дней: ${user.stats.successDays} | 
+                        Срывов: ${user.stats.failDays} | 
+                        Серия: ${user.stats.currentStreak}
+                    </div>
                 `;
-                
-                tableBody.appendChild(row);
-            });
-        }
-        
-        function getGenderName(gender) {
-            switch(gender) {
-                case 'male': return 'Мужской';
-                case 'female': return 'Женский';
-                case 'other': return 'Другой';
-                default: return '-';
+                userElement.addEventListener('click', () => showUserData(username));
+                usersList.appendChild(userElement);
             }
         }
-        
-        function showLifeSphere(sphereId) {
-            currentSphere = sphereId;
+
+        // Поиск пользователей
+        function searchUsers() {
+            const searchTerm = document.getElementById('user-search').value.toLowerCase();
+            const users = document.querySelectorAll('#users-list > div');
             
-            const sphere = lifeSpheres.find(s => s.id === sphereId);
-            const userSphere = currentUser.spheres.find(s => s.id === sphereId);
-            
-            document.getElementById('user-dashboard').classList.add('hidden');
-            document.getElementById('life-sphere').classList.remove('hidden');
-            
-            // Заголовок сферы
-            document.getElementById('sphere-title').textContent = sphere.name.toUpperCase();
-            
-            // Текущее состояние
-            document.getElementById('sphere-current-text').value = userSphere.currentState || '';
-            
-            // Уровень
-            document.getElementById('sphere-level').value = userSphere.level || 0;
-            document.getElementById('sphere-level-value').textContent = `${userSphere.level || 0}/10`;
-            
-            // Цели
-            loadSphereGoals();
-            
-            // Задачи
-            loadSphereTasks();
-        }
-        
-        function loadHabits() {
-            const habitTracker = document.querySelector('.habit-tracker');
-            habitTracker.innerHTML = '';
-            
-            currentUser.habits.forEach((habit, index) => {
-                const habitItem = document.createElement('div');
-                habitItem.className = 'habit-item flex justify-between items-center';
-                
-                habitItem.innerHTML = `
-                    <span>${habit.name}</span>
-                    <input type="checkbox" class="habit-checkbox" data-index="${index}" ${habit.checked ? 'checked' : ''}>
-                `;
-                
-                habitTracker.appendChild(habitItem);
-            });
-            
-            // Назначение обработчиков для чекбоксов
-            document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    const index = parseInt(this.dataset.index);
-                    currentUser.habits[index].checked = this.checked;
-                    
-                    // Начисление очков за выполнение привычки
-                    if (this.checked) {
-                        currentUser.points += 5;
-                        document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
-                        checkLevelUp();
-                    }
-                    
-                    saveUserData();
-                });
-            });
-        }
-        
-        function loadTasks() {
-            const tasksContainer = document.getElementById('sphere-tasks');
-            tasksContainer.innerHTML = '';
-            
-            currentUser.tasks.forEach((task, index) => {
-                const taskItem = document.createElement('div');
-                taskItem.className = `task-item flex justify-between items-center mb-2 ${task.completed ? 'completed' : ''}`;
-                
-                taskItem.innerHTML = `
-                    <span>${task.name}</span>
-                    <input type="checkbox" class="habit-checkbox" data-index="${index}" ${task.completed ? 'checked' : ''}>
-                `;
-                
-                tasksContainer.appendChild(taskItem);
-            });
-            
-            // Назначение обработчиков для чекбоксов задач
-            document.querySelectorAll('#sphere-tasks .habit-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    const index = parseInt(this.dataset.index);
-                    currentUser.tasks[index].completed = this.checked;
-                    
-                    // Начисление очков за выполнение задачи
-                    if (this.checked) {
-                        currentUser.points += 10;
-                        document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
-                        checkLevelUp();
-                    }
-                    
-                    saveUserData();
-                });
-            });
-        }
-        
-        function loadSphereGoals() {
-            const goalsContainer = document.getElementById('sphere-goals');
-            goalsContainer.innerHTML = '';
-            
-            const userSphere = currentUser.spheres.find(s => s.id === currentSphere);
-            
-            userSphere.goals.forEach((goal, index) => {
-                const goalItem = document.createElement('div');
-                goalItem.className = 'flex justify-between items-center mb-2';
-                
-                goalItem.innerHTML = `
-                    <span>${goal}</span>
-                    <button class="text-red-500 delete-goal" data-index="${index}">×</button>
-                `;
-                
-                goalsContainer.appendChild(goalItem);
-            });
-            
-            // Назначение обработчиков для удаления целей
-            document.querySelectorAll('.delete-goal').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const index = parseInt(this.dataset.index);
-                    const userSphere = currentUser.spheres.find(s => s.id === currentSphere);
-                    userSphere.goals.splice(index, 1);
-                    saveUserData();
-                    loadSphereGoals();
-                });
-            });
-        }
-        
-        function loadSphereTasks() {
-            const tasksContainer = document.getElementById('sphere-tasks');
-            tasksContainer.innerHTML = '';
-            
-            const userSphere = currentUser.spheres.find(s => s.id === currentSphere);
-            
-            userSphere.tasks.forEach((task, index) => {
-                const taskItem = document.createElement('div');
-                taskItem.className = `task-item flex justify-between items-center mb-2 ${task.completed ? 'completed' : ''}`;
-                
-                taskItem.innerHTML = `
-                    <span>${task.name}</span>
-                    <input type="checkbox" class="habit-checkbox" data-index="${index}" ${task.completed ? 'checked' : ''}>
-                `;
-                
-                tasksContainer.appendChild(taskItem);
-            });
-            
-            // Назначение обработчиков для чекбоксов задач
-            document.querySelectorAll('#sphere-tasks .habit-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    const index = parseInt(this.dataset.index);
-                    const userSphere = currentUser.spheres.find(s => s.id === currentSphere);
-                    userSphere.tasks[index].completed = this.checked;
-                    
-                    // Начисление очков за выполнение задачи
-                    if (this.checked) {
-                        currentUser.points += 15;
-                        document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
-                        checkLevelUp();
-                    }
-                    
-                    saveUserData();
-                });
-            });
-        }
-        
-        function saveDiary() {
-            const entry = document.getElementById('diary-entry').value;
-            
-            if (entry.trim()) {
-                const today = new Date().toISOString().split('T')[0];
-                const existingEntryIndex = currentUser.diary.findIndex(e => e.date === today);
-                
-                if (existingEntryIndex >= 0) {
-                    currentUser.diary[existingEntryIndex].text = entry;
+            users.forEach(user => {
+                const username = user.querySelector('.font-semibold').textContent.toLowerCase();
+                if (username.includes(searchTerm)) {
+                    user.classList.remove('hidden');
                 } else {
-                    currentUser.diary.push({
-                        date: today,
-                        text: entry
-                    });
+                    user.classList.add('hidden');
                 }
+            });
+        }
+
+        // Показать данные пользователя (для разработчика)
+        function showUserData(username) {
+            const user = usersDB[username];
+            const container = document.getElementById('user-data-container');
+            
+            document.getElementById('selected-user-info').innerHTML = `
+                <div class="font-semibold">${username}</div>
+                <div class="text-sm mb-2">Зарегистрирован: ${new Date(user.registrationDate || Date.now()).toLocaleDateString()}</div>
+            `;
+            
+            // Статистика
+            document.getElementById('dev-user-stats').innerHTML = `
+                <div>Успешных дней: ${user.stats.successDays}</div>
+                <div>Срывов: ${user.stats.failDays}</div>
+                <div>Текущая серия: ${user.stats.currentStreak}</div>
+                <div>Лучшая серия: ${user.stats.longestStreak}</div>
+                <div class="mt-2">
+                    <div class="w-full bg-gray-300 rounded-full h-2.5 dark:bg-gray-700">
+                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: ${Math.round((user.stats.successDays / (user.stats.successDays + user.stats.failDays || 1)) * 100)}%"></div>
+                    </div>
+                    <div class="text-xs mt-1">Успех: ${Math.round((user.stats.successDays / (user.stats.successDays + user.stats.failDays || 1)) * 100)}%</div>
+                </div>
+            `;
+            
+            // История дней
+            const historyContainer = document.getElementById('dev-user-history');
+            historyContainer.innerHTML = '';
+            
+            const days = Object.keys(user.days).sort((a, b) => b - a);
+            days.forEach(day => {
+                const dayData = user.days[day];
+                const dayElement = document.createElement('div');
+                dayElement.className = 'p-2 border-b text-sm';
+                dayElement.innerHTML = `
+                    <div class="font-semibold">День ${day}: <span class="${dayData.status === 'success' ? 'text-green-500' : 'text-red-500'}">${dayData.status === 'success' ? 'Успех' : 'Срыв'}</span></div>
+                    <div>Энергия: ${dayData.energy}/10 | Настроение: ${dayData.mood}/10</div>
+                    <div class="text-xs text-gray-400">${dayData.notes || 'Нет заметок'}</div>
+                `;
+                historyContainer.appendChild(dayElement);
+            });
+            
+            container.classList.remove('hidden');
+        }
+
+        // Отметить день как успешный
+        function markDayAsSuccess() {
+            document.getElementById('success-btn').classList.add('bg-green-700');
+            document.getElementById('fail-btn').classList.remove('bg-red-700');
+        }
+
+        // Отметить день как срыв
+        function markDayAsFail() {
+            document.getElementById('fail-btn').classList.add('bg-red-700');
+            document.getElementById('success-btn').classList.remove('bg-green-700');
+        }
+
+        // Сохранить день
+        function saveDay() {
+            const user = usersDB[currentUser];
+            const energy = parseInt(document.getElementById('energy-level').value);
+            const mood = parseInt(document.getElementById('mood-level').value);
+            const notes = document.getElementById('daily-notes').value.trim();
+            
+            let status = null;
+            if (document.getElementById('success-btn').classList.contains('bg-green-700')) {
+                status = 'success';
+            } else if (document.getElementById('fail-btn').classList.contains('bg-red-700')) {
+                status = 'fail';
+            }
+            
+            if (!status) {
+                alert('Пожалуйста, отметьте, был ли сегодня успех или срыв');
+                return;
+            }
+            
+            // Сохраняем день
+            user.days[currentDay] = {
+                status: status,
+                energy: energy,
+                mood: mood,
+                notes: notes,
+                date: new Date().toISOString()
+            };
+            
+            // Обновляем статистику
+            if (status === 'success') {
+                user.stats.successDays++;
+                user.stats.currentStreak++;
+                if (user.stats.currentStreak > user.stats.longestStreak) {
+                    user.stats.longestStreak = user.stats.currentStreak;
+                }
+            } else {
+                user.stats.failDays++;
+                user.stats.currentStreak = 0;
+            }
+            
+            // Добавляем в историю энергии и настроения
+            user.energyHistory.push(energy);
+            user.moodHistory.push(mood);
+            
+            // Сохраняем в локальное хранилище
+            localStorage.setItem('usersDB', JSON.stringify(usersDB));
+            
+            // Обновляем интерфейс
+            updateUserStats();
+            loadUserHistory();
+            
+            // Переходим к следующему дню, если это не последний день
+            if (currentDay < 31) {
+                currentDay++;
+                document.getElementById('current-day').textContent = currentDay;
+                document.getElementById('motivation-text').textContent = motivationTexts[currentDay - 1] || motivationTexts[motivationTexts.length - 1];
                 
-                // Начисление очков за ведение дневника
-                currentUser.points += 3;
-                document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
-                checkLevelUp();
-                
-                saveUserData();
-                alert('Дневник сохранен');
+                // Сбрасываем поля для нового дня
+                document.getElementById('energy-level').value = 5;
+                document.getElementById('mood-level').value = 5;
+                document.getElementById('daily-notes').value = '';
+                document.getElementById('success-btn').classList.remove('bg-green-700');
+                document.getElementById('fail-btn').classList.remove('bg-red-700');
+            } else {
+                alert('Поздравляем! Вы завершили 31-дневный челлендж!');
             }
         }
-        
-        function savePointA() {
-            const pointA = document.getElementById('point-a').value;
-            currentUser.pointA = pointA;
+
+        // Обновить статистику пользователя
+        function updateUserStats() {
+            const user = usersDB[currentUser];
             
-            // Начисление очков за определение точки А
-            if (pointA.trim() && !currentUser.pointA) {
-                currentUser.points += 20;
-                document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
-                checkLevelUp();
+            // Обновляем текст статистики
+            document.getElementById('user-stats').innerHTML = `
+                Успешных дней: <span class="text-green-500">${user.stats.successDays}</span> |
+                Срывов: <span class="text-red-500">${user.stats.failDays}</span> |
+                Текущая серия: <span class="text-blue-500">${user.stats.currentStreak}</span>
+            `;
+            
+            // Прогресс бар
+            const progress = (currentDay - 1) / 31 * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-text').textContent = `${Math.round(progress)}% завершено`;
+            
+            // Средние значения
+            if (user.energyHistory.length > 0) {
+                const avgEnergy = (user.energyHistory.reduce((a, b) => a + b, 0) / user.energyHistory.length).toFixed(1);
+                document.getElementById('avg-energy').textContent = avgEnergy;
             }
             
-            saveUserData();
-            alert('Точка А сохранена');
-        }
-        
-        function savePointB() {
-            const pointB = document.getElementById('point-b').value;
-            currentUser.pointB = pointB;
-            
-            // Начисление очков за определение точки Б
-            if (pointB.trim() && !currentUser.pointB) {
-                currentUser.points += 20;
-                document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
-                checkLevelUp();
+            if (user.moodHistory.length > 0) {
+                const avgMood = (user.moodHistory.reduce((a, b) => a + b, 0) / user.moodHistory.length).toFixed(1);
+                document.getElementById('avg-mood').textContent = avgMood;
             }
             
-            saveUserData();
-            alert('Точка Б сохранена');
+            // Графики
+            updateCharts();
         }
-        
-        function addNewHabit() {
-            const habitName = prompt('Введите название новой привычки:');
+
+        // Обновить графики
+        function updateCharts() {
+            const user = usersDB[currentUser];
             
-            if (habitName && habitName.trim()) {
-                currentUser.habits.push({
-                    name: habitName.trim(),
-                    checked: false
-                });
-                
-                saveUserData();
-                loadHabits();
+            // График энергии
+            const energyCtx = document.getElementById('energy-chart').getContext('2d');
+            if (window.energyChart) {
+                window.energyChart.destroy();
+            }
+            window.energyChart = new Chart(energyCtx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: user.energyHistory.length}, (_, i) => i + 1),
+                    datasets: [{
+                        label: 'Энергия',
+                        data: user.energyHistory,
+                        borderColor: 'rgb(59, 130, 246)',
+                        tension: 0.1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 1,
+                            max: 10
+                        }
+                    }
+                }
+            });
+            
+            // График настроения
+            const moodCtx = document.getElementById('mood-chart').getContext('2d');
+            if (window.moodChart) {
+                window.moodChart.destroy();
+            }
+            window.moodChart = new Chart(moodCtx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: user.moodHistory.length}, (_, i) => i + 1),
+                    datasets: [{
+                        label: 'Настроение',
+                        data: user.moodHistory,
+                        borderColor: 'rgb(16, 185, 129)',
+                        tension: 0.1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 1,
+                            max: 10
+                        }
+                    }
+                }
+            });
+        }
+
+        // Загрузить сообщения пользователя
+        function loadUserMessages() {
+            const user = usersDB[currentUser];
+            const container = document.getElementById('messages-container');
+            container.innerHTML = '';
+            
+            if (user.messages.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-500 py-4">Нет сообщений</div>';
+                return;
+            }
+            
+            user.messages.forEach(msg => {
+                const msgElement = document.createElement('div');
+                msgElement.className = 'mb-3 p-3 rounded-lg';
+                if (msg.from === 'dev') {
+                    msgElement.classList.add('bg-blue-900', 'bg-opacity-30');
+                    msgElement.innerHTML = `
+                        <div class="text-xs text-blue-400 mb-1">От разработчика</div>
+                        <div>${msg.text}</div>
+                        <div class="text-xs text-gray-500 mt-1">${new Date(msg.date).toLocaleString()}</div>
+                    `;
+                } else {
+                    msgElement.classList.add('bg-gray-700', 'bg-opacity-30');
+                    msgElement.innerHTML = `
+                        <div class="text-xs text-gray-400 mb-1">Вы</div>
+                        <div>${msg.text}</div>
+                        <div class="text-xs text-gray-500 mt-1">${new Date(msg.date).toLocaleString()}</div>
+                    `;
+                }
+                container.appendChild(msgElement);
+            });
+        }
+
+        // Загрузить историю пользователя
+        function loadUserHistory() {
+            const user = usersDB[currentUser];
+            const container = document.getElementById('history-container');
+            container.innerHTML = '';
+            
+            const days = Object.keys(user.days).sort((a, b) => b - a);
+            if (days.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-500 py-4">Нет истории</div>';
+                return;
+            }
+            
+            days.forEach(day => {
+                const dayData = user.days[day];
+                const dayElement = document.createElement('div');
+                dayElement.className = 'mb-3 p-3 rounded-lg bg-gray-700 bg-opacity-20';
+                dayElement.innerHTML = `
+                    <div class="font-semibold">День ${day}: <span class="${dayData.status === 'success' ? 'text-green-500' : 'text-red-500'}">${dayData.status === 'success' ? 'Успех' : 'Срыв'}</span></div>
+                    <div class="text-sm">Энергия: ${dayData.energy}/10 | Настроение: ${dayData.mood}/10</div>
+                    <div class="text-xs text-gray-400 mt-1">${dayData.notes || 'Нет заметок'}</div>
+                    <div class="text-xs text-gray-500 mt-1">${new Date(dayData.date).toLocaleDateString()}</div>
+                `;
+                container.appendChild(dayElement);
+            });
+        }
+
+        // Отправить сообщение от пользователя
+        function sendUserMessage() {
+            const text = document.getElementById('new-message').value.trim();
+            if (!text) {
+                alert('Пожалуйста, введите текст сообщения');
+                return;
+            }
+            
+            const user = usersDB[currentUser];
+            user.messages.push({
+                from: 'user',
+                text: text,
+                date: new Date().toISOString()
+            });
+            
+            localStorage.setItem('usersDB', JSON.stringify(usersDB));
+            document.getElementById('new-message').value = '';
+            loadUserMessages();
+        }
+
+        // Отправить сообщение от разработчика
+        function sendDevMessage() {
+            const text = document.getElementById('dev-message').value.trim();
+            const selectedUser = document.querySelector('#users-list > div:not(.hidden)');
+            
+            if (!selectedUser || !text) {
+                alert('Пожалуйста, выберите пользователя и введите текст сообщения');
+                return;
+            }
+            
+            const username = selectedUser.querySelector('.font-semibold').textContent;
+            const user = usersDB[username];
+            user.messages.push({
+                from: 'dev',
+                text: text,
+                date: new Date().toISOString()
+            });
+            
+            localStorage.setItem('usersDB', JSON.stringify(usersDB));
+            document.getElementById('dev-message').value = '';
+            showUserData(username);
+            
+            // Если пользователь сейчас активен, обновим его сообщения
+            if (currentUser === username && document.getElementById('user-panel').classList.contains('hidden') === false) {
+                loadUserMessages();
             }
         }
-        
-        function addNewTask() {
-            const taskName = prompt('Введите название новой задачи:');
-            
-            if (taskName && taskName.trim()) {
-                currentUser.tasks.push({
-                    name: taskName.trim(),
-                    completed: false
-                });
-                
-                saveUserData();
-                loadTasks();
-            }
-        }
-        
-        function addSphereGoal() {
-            const goalInput = document.getElementById('new-goal');
-            const goal = goalInput.value.trim();
-            
-            if (goal) {
-                const userSphere = currentUser.spheres.find(s => s.id === currentSphere);
-                userSphere.goals.push(goal);
-                
-                // Начисление очков за добавление цели
-                currentUser.points += 5;
-                document.getElementById('user-points').textContent = `Очки: ${currentUser.points}`;
-                checkLevelUp();
-                
-                saveUserData();
-                loadSphereGoals();
-                goalInput.value = '';
-            }
-        }
-        
-        function saveUserData() {
-            // Обновляем пользователя в базе данных
-            const userIndex = usersDB.findIndex(u => u.id === currentUser.id);
-            if (userIndex >= 0) {
-                usersDB[userIndex] = currentUser;
-                localStorage.setItem('usersDB', JSON.stringify(usersDB));
-            }
-        }
-        
-        function checkLevelUp() {
-            const pointsForNextLevel = currentUser.level * 100;
-            
-            if (currentUser.points >= pointsForNextLevel) {
-                currentUser.level += 1;
-                document.getElementById('user-level').textContent = `Уровень: ${currentUser.level}`;
-                document.getElementById('character-level').textContent = `Уровень: ${currentUser.level}`;
-                
-                alert(`Поздравляем! Вы достигли уровня ${currentUser.level}!`);
-                saveUserData();
+
+        // Переключение темы
+        function toggleTheme() {
+            if (document.body.classList.contains('light-theme')) {
+                document.body.classList.remove('light-theme');
+                document.body.classList.add('dark-theme');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-theme');
+                document.body.classList.add('light-theme');
+                localStorage.setItem('theme', 'light');
             }
         }
     </script>
