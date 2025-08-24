@@ -3,1320 +3,602 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Хватит дрочить - стань воином</title>
+    <title>Владимир Мирончук | Продюсер экспертов</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --bg-primary: #f8f9fa;
-            --bg-secondary: #ffffff;
-            --text-primary: #212529;
-            --text-secondary: #495057;
-            --accent: #4361ee;
-            --success: #4cc9f0;
-            --danger: #f72585;
-            --warning: #f8961e;
-            --border-radius: 12px;
-            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .dark-theme {
-            --bg-primary: #121212;
-            --bg-secondary: #1e1e1e;
-            --text-primary: #f8f9fa;
-            --text-secondary: #adb5bd;
-            --accent: #4895ef;
-            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
+        
         body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            transition: var(--transition);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Manrope', sans-serif;
+            background-color: #0a0a0a;
+            color: #e5e5e5;
         }
-
-        .card {
-            background-color: var(--bg-secondary);
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            transition: var(--transition);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #f59e0b, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-
-        .dark-theme .card {
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        
+        .glow-effect {
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.5);
         }
-
-        .btn {
-            border-radius: 8px;
-            font-weight: 600;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+        
+        .social-icon {
+            transition: all 0.3s ease;
         }
-
-        .btn-primary {
-            background-color: var(--accent);
-            color: white;
+        
+        .social-icon:hover {
+            transform: translateY(-5px);
         }
-
-        .btn-primary:hover {
-            background-color: #3a56e8;
-            transform: translateY(-1px);
+        
+        .feature-card {
+            transition: all 0.3s ease;
+            border: 1px solid #333;
         }
-
-        .btn-success {
-            background-color: var(--success);
-            color: white;
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #ec4899;
         }
-
-        .btn-danger {
-            background-color: var(--danger);
-            color: white;
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
         }
-
-        .input-field {
-            border-radius: 8px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            transition: var(--transition);
-            background-color: var(--bg-secondary);
-            color: var(--text-primary);
-        }
-
-        .input-field:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-        }
-
-        .progress-bar {
-            height: 8px;
-            border-radius: 4px;
-            background-color: rgba(67, 97, 238, 0.1);
-        }
-
-        .progress-bar-fill {
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
-            border-radius: 4px;
-            background-color: var(--accent);
-            transition: width 0.5s ease;
-        }
-        .hidden {
-            display: none !important;
         }
     </style>
 </head>
-<body class="dark-theme min-h-screen flex flex-col">
-    <!-- Главный экран -->
-    <div id="main-screen" class="flex flex-col items-center justify-center flex-grow p-4">
-        <div class="card p-8 max-w-2xl w-full text-center shadow-2xl">
-            <h1 class="text-4xl md:text-5xl font-bold mb-8 text-accent">ХВАТИТ ДРОЧИТЬ - СТАНЬ ВОИНОМ</h1>
-            <div class="flex space-x-4 justify-center mb-8">
-            <button id="login-btn" class="btn btn-primary px-6 py-3">
-                <i class="fas fa-sign-in-alt"></i> Войти
-            </button>
-            <button id="register-btn" class="btn px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
-                <i class="fas fa-user-plus"></i> Регистрация
-            </button>
-        </div>
+<body class="bg-gray-900 text-gray-200">
+    <!-- Header -->
+    <header class="bg-black py-6 sticky top-0 z-50 border-b border-gray-800">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-microphone text-2xl text-pink-500"></i>
+                <span class="text-xl font-bold">MiRON<span class="gradient-text">producer</span></span>
             </div>
-            <div class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                Пройди 31-дневный челлендж и измени свою жизнь
-            </div>
-        </div>
-        <div class="absolute bottom-4 right-4">
-            <button id="dev-btn" class="p-2 bg-gray-800 text-white rounded-full shadow-lg">
-                <i class="fas fa-code"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- Форма входа -->
-    <div id="login-form" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div class="card rounded-lg p-6 w-full max-w-md">
-            <h2 class="text-2xl font-bold mb-4">Вход</h2>
-            <div class="mb-4">
-                <label class="block mb-2">Логин</label>
-                <input type="text" id="login-username" class="input-field w-full p-3 bg-white text-black dark:bg-white dark:text-black">
-            </div>
-            <div class="mb-6">
-                <label class="block mb-2">Пароль</label>
-                <input type="password" id="login-password" class="w-full p-2 border rounded bg-white text-black dark:bg-white dark:text-black">
-            </div>
-            <div class="flex justify-between">
-                <button id="login-submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Войти</button>
-                <button id="login-cancel" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded">Отмена</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Форма регистрации -->
-    <div id="register-form" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div class="card rounded-lg p-6 w-full max-w-md">
-            <h2 class="text-2xl font-bold mb-4">Регистрация</h2>
-            <div class="mb-4">
-                <label class="block mb-2">Логин</label>
-                <input type="text" id="register-username" class="w-full p-2 border rounded text-black">
-            </div>
-            <div class="mb-4">
-                <label class="block mb-2">Пароль</label>
-                <input type="password" id="register-password" class="w-full p-2 border rounded text-black">
-            </div>
-            <div class="mb-6">
-                <label class="block mb-2">Подтвердите пароль</label>
-                <input type="password" id="register-confirm" class="w-full p-2 border rounded text-black">
-            </div>
-            <div class="flex justify-between">
-                <button id="register-submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Зарегистрироваться</button>
-                <button id="register-cancel" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded">Отмена</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Вход разработчика -->
-    <div id="dev-login" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div class="card rounded-lg p-6 w-full max-w-md">
-            <h2 class="text-2xl font-bold mb-4">Вход разработчика</h2>
-            <div class="mb-6">
-                <label class="block mb-2">Пароль</label>
-                <input type="password" id="dev-password" class="w-full p-2 border rounded text-black">
-            </div>
-            <div class="flex justify-between">
-                <button id="dev-submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Войти</button>
-                <button id="dev-cancel" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded">Отмена</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Панель пользователя -->
-    <div id="user-panel" class="hidden flex-grow p-4">
-        <div class="flex justify-between items-center mb-6">
-            <div>
-                <h2 id="user-greeting" class="text-2xl font-bold"></h2>
-                <div id="user-stats" class="text-lg"></div>
-            </div>
-            <div class="flex space-x-2">
-                <button id="messages-toggle" class="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white" title="Общаться с наставником">
-                    <i class="fas fa-comments"></i>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#about" class="hover:text-pink-500 transition">Обо мне</a>
+                <a href="#process" class="hover:text-pink-500 transition">Как я работаю</a>
+                <a href="#results" class="hover:text-pink-500 transition">Результаты</a>
+                <a href="#contact" class="hover:text-pink-500 transition">Контакты</a>
+            </nav>
+            <div class="md:hidden">
+                <button id="menu-toggle" class="text-gray-300 hover:text-white focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
                 </button>
-                <button id="theme-toggle" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors">
-                    <i class="fas fa-sun text-yellow-400"></i>
-                    <i class="fas fa-moon text-gray-300 hidden"></i>
-                </button>
-                <button id="logout-btn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded">Выйти</button>
             </div>
         </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-900 px-4 py-2 border-t border-gray-800">
+            <a href="#about" class="block py-2 hover:text-pink-500 transition">Обо мне</a>
+            <a href="#process" class="block py-2 hover:text-pink-500 transition">Как я работаю</a>
+            <a href="#results" class="block py-2 hover:text-pink-500 transition">Результаты</a>
+            <a href="#contact" class="block py-2 hover:text-pink-500 transition">Контакты</a>
+        </div>
+    </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Трекер дней -->
-            <div class="card rounded-lg p-6">
-                <h3 class="text-xl font-bold mb-4">День <span id="current-day">1</span>/31</h3>
-                <div id="motivation-text" class="mb-4 text-sm"></div>
-                <div class="mb-4">
-                    <label class="block mb-2">Энергия сегодня (1-10)</label>
-                    <input type="range" id="energy-level" min="1" max="10" value="5" class="w-full">
-                    <div class="flex justify-between text-xs">
-                        <span>1</span>
-                        <span>2</span>
-                        <span>3</span>
-                        <span>4</span>
-                        <span>5</span>
-                        <span>6</span>
-                        <span>7</span>
-                        <span>8</span>
-                        <span>9</span>
-                        <span>10</span>
+    <!-- Hero Section -->
+    <section class="relative py-20 md:py-32 bg-gradient-to-b from-gray-900 to-black overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-0 left-0 w-1/3 h-1/3 bg-pink-500 rounded-full filter blur-3xl opacity-70"></div>
+            <div class="absolute bottom-0 right-0 w-1/3 h-1/3 bg-yellow-500 rounded-full filter blur-3xl opacity-70"></div>
+        </div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                        <span class="gradient-text">Владимир Мирончук</span><br>
+                        Продюсер экспертов
+                    </h1>
+                    <p class="text-xl mb-8 text-gray-300">
+                        Если вы эксперт в какой-либо сфере - обладаете уникальными знаниями или опытом, я помогу вам стать медийными и получить узнаваемость и массу клиентов.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="tel:9773818978" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-full transition flex items-center justify-center glow-effect">
+                            <i class="fas fa-phone-alt mr-2"></i> Позвонить
+                        </a>
+                        <a href="https://t.me/MiRONproducer" target="_blank" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-full transition flex items-center justify-center border border-gray-700">
+                            <i class="fab fa-telegram-plane mr-2"></i> Написать в Telegram
+                        </a>
                     </div>
                 </div>
-                <div class="mb-4">
-                    <label class="block mb-2">Настроение сегодня (1-10)</label>
-                    <input type="range" id="mood-level" min="1" max="10" value="5" class="w-full">
-                    <div class="flex justify-between text-xs">
-                        <span>1</span>
-                        <span>2</span>
-                        <span>3</span>
-                        <span>4</span>
-                        <span>5</span>
-                        <span>6</span>
-                        <span>7</span>
-                        <span>8</span>
-                        <span>9</span>
-                        <span>10</span>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative w-full max-w-md">
+                        <div class="absolute -top-10 -left-10 w-32 h-32 bg-pink-500 rounded-full filter blur-xl opacity-20"></div>
+                        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-yellow-500 rounded-full filter blur-xl opacity-20"></div>
+                        <div class="relative bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-xl">
+                            <div class="flex justify-center mb-6">
+                                <div class="w-24 h-24 rounded-full bg-gradient-to-br from-pink-500 to-yellow-500 flex items-center justify-center">
+                                    <i class="fas fa-microphone text-4xl text-white"></i>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <h3 class="text-2xl font-bold mb-2">Запишитесь на консультацию</h3>
+                                <p class="text-gray-400 mb-4">Я лично разберу ваш кейс и расскажу, как вы можете стать популярным экспертом</p>
+                                <a href="https://t.me/MiRONproducer" target="_blank" class="inline-block bg-gradient-to-r from-pink-500 to-yellow-500 text-white font-bold py-2 px-6 rounded-full transition hover:opacity-90">
+                                    Бесплатная консультация
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="flex space-x-4 mb-4">
-                    <button id="success-btn" class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">
-                        <i class="fas fa-check mr-2"></i> Успех
-                    </button>
-                    <button id="fail-btn" class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded">
-                        <i class="fas fa-times mr-2"></i> Сорвался
-                    </button>
-                </div>
-                <div class="mb-4">
-                    <label class="block mb-2">Заметки на сегодня</label>
-                    <textarea id="daily-notes" class="w-full p-2 border rounded text-black" rows="3"></textarea>
-                </div>
-                <button id="save-day" class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Сохранить день</button>
-            </div>
-
-            <!-- Статистика -->
-            <div class="card rounded-lg p-6">
-                <h3 class="text-xl font-bold mb-4">Ваша статистика</h3>
-                <div class="mb-4">
-                    <h4 class="font-semibold mb-2">Прогресс</h4>
-                    <div class="progress-bar w-full">
-                        <div id="progress-bar" class="progress-bar-fill" style="width: 0%"></div>
-                    </div>
-                    <div id="progress-text" class="text-sm mt-1">0% завершено</div>
-                </div>
-                <div class="mb-4">
-                    <h4 class="font-semibold mb-2">Средняя энергия</h4>
-                    <div id="avg-energy" class="text-2xl font-bold">0</div>
-                </div>
-                <div class="mb-4">
-                    <h4 class="font-semibold mb-2">Среднее настроение</h4>
-                    <div id="avg-mood" class="text-2xl font-bold">0</div>
-                </div>
-                <div class="mb-4">
-                    <h4 class="font-semibold mb-2">График энергии</h4>
-                    <canvas id="energy-chart" class="w-full h-32"></canvas>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-2">График настроения</h4>
-                    <canvas id="mood-chart" class="w-full h-32"></canvas>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- Сообщения и история -->
-            <div class="card rounded-lg p-6">
-                <h3 class="text-xl font-bold mb-4">Сообщения</h3>
-                <div id="messages-container" class="mb-4 max-h-48 overflow-y-auto">
-                    <!-- Сообщения будут здесь -->
+    <!-- Stats Section -->
+    <section class="py-16 bg-black">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                    <div class="text-4xl font-bold mb-2 gradient-text">500K+</div>
+                    <div class="text-gray-400">просмотров на твоих видео каждый месяц</div>
                 </div>
-                <div class="mb-4">
-                    <label class="block mb-2">Новое сообщение</label>
-                    <textarea id="new-message" class="w-full p-2 border rounded text-black" rows="2"></textarea>
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                    <div class="text-4xl font-bold mb-2 gradient-text">30+</div>
+                    <div class="text-gray-400">вертикальных видео каждый месяц</div>
                 </div>
-                <button id="send-message" class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Отправить</button>
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                    <div class="text-4xl font-bold mb-2 gradient-text">90 дней</div>
+                    <div class="text-gray-400">до твоей медийности</div>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                    <div class="text-4xl font-bold mb-2 gradient-text">1000+</div>
+                    <div class="text-gray-400">клиентов каждый месяц</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Почему стоит работать со мной?</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-yellow-500 mx-auto"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 feature-card">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-pink-500 bg-opacity-20 flex items-center justify-center mr-4">
+                            <i class="fas fa-video text-pink-500"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Профессиональная съемка</h3>
+                    </div>
+                    <p class="text-gray-400">
+                        Мы встречаемся в профессиональной студии на несколько часов и делаем съемку, где вы рассказываете о своем пути, опыте, делитесь историями из практики.
+                    </p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 feature-card">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-yellow-500 bg-opacity-20 flex items-center justify-center mr-4">
+                            <i class="fas fa-cut text-yellow-500"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Качественный монтаж</h3>
+                    </div>
+                    <p class="text-gray-400">
+                        Вы получаете профессиональный выпуск на YouTube с динамичным современным монтажом и качеством картинки как у топовых мировых блогеров.
+                    </p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 feature-card">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-purple-500 bg-opacity-20 flex items-center justify-center mr-4">
+                            <i class="fas fa-users text-purple-500"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Рост аудитории</h3>
+                    </div>
+                    <p class="text-gray-400">
+                        Я создаю вам популярные социальные сети, странички и заливаю на них контент в течение целого месяца для органичного роста подписчиков.
+                    </p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 feature-card">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-500 bg-opacity-20 flex items-center justify-center mr-4">
+                            <i class="fas fa-chart-line text-blue-500"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Увеличение клиентов</h3>
+                    </div>
+                    <p class="text-gray-400">
+                        Ролики такого формата выстреливают на сотни тысяч просмотров, принося тысячи новых клиентов и рекламодателей на ваш блог.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="bg-gradient-to-r from-gray-800 to-gray-900 p-8 md:p-12 rounded-xl border border-gray-700">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-2/3 mb-6 md:mb-0">
+                        <h3 class="text-2xl font-bold mb-4">Создание бренда — вложение ценнее драгоценностей: оно строит наследие и открывает безграничные возможности</h3>
+                        <p class="text-gray-300">
+                            Это актив, который растет каждый день, пока вы спите в своей постели. Всего за 100 тысяч в месяц вы получаете свой бренд. За 1 год можно стать популярным блогером и экспертом.
+                        </p>
+                    </div>
+                    <div class="md:w-1/3 flex justify-center">
+                        <a href="https://t.me/MiRONproducer" target="_blank" class="bg-gradient-to-r from-pink-500 to-yellow-500 text-white font-bold py-3 px-8 rounded-full transition hover:opacity-90 flex items-center">
+                            <i class="fab fa-telegram-plane mr-2"></i> Начать сейчас
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process" class="py-20 bg-black">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Как я работаю</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-yellow-500 mx-auto"></div>
+            </div>
+            
+            <div class="relative">
+                <!-- Timeline line -->
+                <div class="hidden md:block absolute left-1/2 h-full w-1 bg-gradient-to-b from-pink-500 to-yellow-500 transform -translate-x-1/2"></div>
                 
-                <h3 class="text-xl font-bold mt-6 mb-4">История дней</h3>
-                <div id="history-container" class="max-h-48 overflow-y-auto">
-                    <!-- История будет здесь -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Панель разработчика -->
-    <div id="dev-panel" class="hidden flex-grow p-4">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Панель разработчика</h2>
-            <div class="flex space-x-2">
-                <button id="inbox-btn" class="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white relative" title="Входящие сообщения">
-                    <i class="fas fa-inbox"></i>
-                    <span id="inbox-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
-                </button>
-                <button id="theme-toggle-dev" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700">
-                    <i class="fas fa-moon dark:hidden"></i>
-                    <i class="fas fa-sun hidden dark:block"></i>
-                </button>
-                <button id="dev-logout" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded">Выйти</button>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Список пользователей -->
-            <div class="card rounded-lg p-6">
-                <h3 class="text-xl font-bold mb-4">Пользователи</h3>
-                <div class="mb-4">
-                    <input type="text" id="user-search" placeholder="Поиск пользователей..." class="w-full p-2 border rounded text-black">
-                </div>
-                <div id="users-list" class="max-h-96 overflow-y-auto">
-                    <!-- Список пользователей будет здесь -->
-                </div>
-            </div>
-
-            <!-- Данные пользователя -->
-            <div class="card rounded-lg p-6">
-                <h3 class="text-xl font-bold mb-4">Данные пользователя</h3>
-                <div id="selected-user-info" class="mb-4">
-                    Выберите пользователя слева
-                </div>
-                <div id="user-data-container" class="hidden">
-                    <div class="mb-4">
-                        <h4 class="font-semibold mb-2">Статистика</h4>
-                        <div id="dev-user-stats"></div>
+                <!-- Timeline items -->
+                <div class="space-y-12 md:space-y-0">
+                    <!-- Item 1 -->
+                    <div class="relative flex flex-col md:flex-row items-center">
+                        <div class="md:w-1/2 md:pr-12 mb-8 md:mb-0 md:text-right">
+                            <h3 class="text-2xl font-bold mb-3">1. Первичная консультация</h3>
+                            <p class="text-gray-400">
+                                Мы встречаемся либо лично в Москве, либо по видеосвязи. Я беру у вас предварительное интервью, чтобы понять ваш уникальный опыт и знания.
+                            </p>
+                        </div>
+                        <div class="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-yellow-500 mx-4 z-10">
+                            <i class="fas fa-comments text-white"></i>
+                        </div>
+                        <div class="md:w-1/2 md:pl-12">
+                            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                                <div class="flex items-center mb-4">
+                                    <i class="fas fa-video text-pink-500 mr-3"></i>
+                                    <span class="font-bold">Формат:</span>
+                                </div>
+                                <p class="text-gray-400">Личная встреча или Zoom-звонок</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <h4 class="font-semibold mb-2">История дней</h4>
-                        <div id="dev-user-history" class="max-h-48 overflow-y-auto"></div>
+                    
+                    <!-- Item 2 -->
+                    <div class="relative flex flex-col md:flex-row items-center">
+                        <div class="md:w-1/2 md:pr-12 order-1 mb-8 md:mb-0">
+                            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                                <div class="flex items-center mb-4">
+                                    <i class="fas fa-file-alt text-yellow-500 mr-3"></i>
+                                    <span class="font-bold">Результат:</span>
+                                </div>
+                                <p class="text-gray-400">Готовый сценарий для съемки с продуманными темами</p>
+                            </div>
+                        </div>
+                        <div class="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-yellow-500 mx-4 z-10 order-2">
+                            <i class="fas fa-search text-white"></i>
+                        </div>
+                        <div class="md:w-1/2 md:pl-12 order-3 md:text-left text-right">
+                            <h3 class="text-2xl font-bold mb-3">2. Анализ и подготовка</h3>
+                            <p class="text-gray-400">
+                                Я делаю анализ того, на какие темы мы будем говорить в подкасте, пишу сценарий, подбираем оптимальный формат подачи материала.
+                            </p>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <h4 class="font-semibold mb-2">Отправить сообщение</h4>
-                        <textarea id="dev-message" class="w-full p-2 border rounded text-black" rows="2"></textarea>
-                        <button id="dev-send-message" class="mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Отправить</button>
+                    
+                    <!-- Item 3 -->
+                    <div class="relative flex flex-col md:flex-row items-center">
+                        <div class="md:w-1/2 md:pr-12 mb-8 md:mb-0 md:text-right">
+                            <h3 class="text-2xl font-bold mb-3">3. Профессиональная съемка</h3>
+                            <p class="text-gray-400">
+                                Мы встречаемся в профессиональной студии на несколько часов и делаем съемку, где вы рассказываете о своем пути, опыте, делитесь историями.
+                            </p>
+                        </div>
+                        <div class="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-yellow-500 mx-4 z-10">
+                            <i class="fas fa-film text-white"></i>
+                        </div>
+                        <div class="md:w-1/2 md:pl-12">
+                            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                                <div class="flex items-center mb-4">
+                                    <i class="fas fa-photo-video text-purple-500 mr-3"></i>
+                                    <span class="font-bold">Что получаем:</span>
+                                </div>
+                                <p class="text-gray-400">Несколько часов профессионального видео-материала</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Item 4 -->
+                    <div class="relative flex flex-col md:flex-row items-center">
+                        <div class="md:w-1/2 md:pr-12 order-1 mb-8 md:mb-0">
+                            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                                <div class="flex items-center mb-4">
+                                    <i class="fas fa-play-circle text-blue-500 mr-3"></i>
+                                    <span class="font-bold">Контент:</span>
+                                </div>
+                                <p class="text-gray-400">1 выпуск на YouTube + 30 вертикальных минутных видео</p>
+                            </div>
+                        </div>
+                        <div class="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-yellow-500 mx-4 z-10 order-2">
+                            <i class="fas fa-edit text-white"></i>
+                        </div>
+                        <div class="md:w-1/2 md:pl-12 order-3 md:text-left text-right">
+                            <h3 class="text-2xl font-bold mb-3">4. Пост-продакшн</h3>
+                            <p class="text-gray-400">
+                                Профессиональный монтаж видео, создание вертикальных роликов, оформление каналов, написание постов.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Item 5 -->
+                    <div class="relative flex flex-col md:flex-row items-center">
+                        <div class="md:w-1/2 md:pr-12 mb-8 md:mb-0 md:text-right">
+                            <h3 class="text-2xl font-bold mb-3">5. Продвижение</h3>
+                            <p class="text-gray-400">
+                                Я создаю вам популярные социальные сети, странички и заливаю на них контент в течение целого месяца для органичного роста.
+                            </p>
+                        </div>
+                        <div class="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-yellow-500 mx-4 z-10">
+                            <i class="fas fa-rocket text-white"></i>
+                        </div>
+                        <div class="md:w-1/2 md:pl-12">
+                            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                                <div class="flex items-center mb-4">
+                                    <i class="fas fa-chart-line text-green-500 mr-3"></i>
+                                    <span class="font-bold">Результат:</span>
+                                </div>
+                                <p class="text-gray-400">Органичный рост аудитории, новые клиенты и рекламодатели</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- User Messages Modal -->
-    <div id="user-messages-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div class="card rounded-lg p-6 w-full max-w-md max-h-[80vh] overflow-hidden">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold">Общение с наставником</h3>
-                <button id="close-user-messages" class="p-2 text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
+    <!-- Results Section -->
+    <section id="results" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Что вы получаете</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-yellow-500 mx-auto"></div>
             </div>
-            <div id="user-messages-container" class="overflow-y-auto max-h-[60vh] pr-2 mb-4">
-                <!-- Messages will be loaded here -->
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 feature-card">
+                    <div class="flex justify-center mb-6">
+                        <div class="w-20 h-20 rounded-full bg-pink-500 bg-opacity-20 flex items-center justify-center">
+                            <i class="fas fa-film text-3xl text-pink-500"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-4">Профессиональный выпуск</h3>
+                    <p class="text-gray-400 text-center">
+                        Качественный YouTube-ролик с динамичным монтажом и топовым уровнем картинки
+                    </p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 feature-card">
+                    <div class="flex justify-center mb-6">
+                        <div class="w-20 h-20 rounded-full bg-yellow-500 bg-opacity-20 flex items-center justify-center">
+                            <i class="fas fa-mobile-alt text-3xl text-yellow-500"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-4">30 вертикальных видео</h3>
+                    <p class="text-gray-400 text-center">
+                        Короткие ролики для Instagram Reels, TikTok и YouTube Shorts
+                    </p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 feature-card">
+                    <div class="flex justify-center mb-6">
+                        <div class="w-20 h-20 rounded-full bg-purple-500 bg-opacity-20 flex items-center justify-center">
+                            <i class="fas fa-users text-3xl text-purple-500"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-4">Продвижение 1 месяц</h3>
+                    <p class="text-gray-400 text-center">
+                        Наполнение соцсетей контентом для органичного роста аудитории
+                    </p>
+                </div>
             </div>
-            <div class="flex space-x-2">
-                <textarea id="user-message-input" class="flex-1 p-2 border rounded text-black" rows="2" placeholder="Ваше сообщение..."></textarea>
-                <button id="send-user-message" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+            
+            <div class="bg-gradient-to-r from-gray-800 to-gray-900 p-8 md:p-12 rounded-xl border border-gray-700">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-2/3 mb-6 md:mb-0">
+                        <h3 class="text-2xl font-bold mb-4">Инвестиция в ваш личный бренд</h3>
+                        <p class="text-gray-300 mb-4">
+                            Всего за 100 тысяч в месяц вы получаете полноценный медийный проект, который будет работать на вас 24/7, принося новых клиентов и рекламодателей.
+                        </p>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-pink-500 mt-1 mr-2"></i>
+                                <span>Профессиональная съемка в студии</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-pink-500 mt-1 mr-2"></i>
+                                <span>Качественный монтаж и оформление</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-pink-500 mt-1 mr-2"></i>
+                                <span>30 вертикальных роликов для соцсетей</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-pink-500 mt-1 mr-2"></i>
+                                <span>Месяц продвижения и наполнения контентом</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="md:w-1/3 flex justify-center">
+                        <div class="bg-black p-6 rounded-xl border border-gray-700 text-center">
+                            <div class="text-4xl font-bold mb-2 gradient-text">100K ₽</div>
+                            <div class="text-gray-400 mb-4">в месяц</div>
+                            <a href="tel:9773818978" class="inline-block bg-gradient-to-r from-pink-500 to-yellow-500 text-white font-bold py-2 px-6 rounded-full transition hover:opacity-90 mb-2">
+                                <i class="fas fa-phone-alt mr-2"></i> Позвонить
+                            </a>
+                            <a href="https://t.me/MiRONproducer" target="_blank" class="inline-block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-full transition border border-gray-600">
+                                <i class="fab fa-telegram-plane mr-2"></i> Telegram
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Inbox Modal -->
-    <div id="inbox-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div class="card rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-hidden">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold">Входящие сообщения</h3>
-                <button id="close-inbox" class="p-2 text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
+    <!-- Social Proof Section -->
+    <section class="py-20 bg-black">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Почему это работает</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-yellow-500 mx-auto"></div>
             </div>
-            <div id="inbox-messages" class="overflow-y-auto max-h-[60vh] pr-2">
-                <!-- Messages will be loaded here -->
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-gray-800 p-8 rounded-xl border border-gray-700">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 rounded-full bg-pink-500 bg-opacity-20 flex items-center justify-center mr-4">
+                            <i class="fas fa-eye text-2xl text-pink-500"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Видеоформат — король контента</h3>
+                    </div>
+                    <p class="text-gray-400">
+                        Видео контент получает в 10 раз больше вовлеченности, чем текстовый. Люди лучше воспринимают информацию через видео и доверяют экспертам, которых видят.
+                    </p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-xl border border-gray-700">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 rounded-full bg-yellow-500 bg-opacity-20 flex items-center justify-center mr-4">
+                            <i class="fas fa-bullseye text-2xl text-yellow-500"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Точное попадание в целевую аудиторию</h3>
+                    </div>
+                    <p class="text-gray-400">
+                        Мы фокусируемся на вашей уникальности и подаче, которая резонирует именно с вашей целевой аудиторией, привлекая идеальных клиентов.
+                    </p>
+                </div>
             </div>
-            <div class="mt-4">
-                <textarea id="inbox-reply" class="w-full p-2 border rounded text-black" rows="3" placeholder="Ответ пользователю..."></textarea>
-                <button id="send-reply" class="mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Отправить ответ</button>
+            
+            <div class="bg-gradient-to-r from-gray-800 to-gray-900 p-8 md:p-12 rounded-xl border border-gray-700">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-6 md:mb-0">
+                        <h3 class="text-2xl font-bold mb-4">Пример результата</h3>
+                        <p class="text-gray-300 mb-4">
+                            Вот как может выглядеть итоговый ролик после профессиональной съемки и монтажа:
+                        </p>
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="video-container">
+                            <!-- Placeholder for video -->
+                            <div class="w-full h-full bg-gray-700 rounded-xl flex items-center justify-center">
+                                <div class="text-center">
+                                    <i class="fas fa-play-circle text-5xl text-pink-500 mb-2"></i>
+                                    <p class="text-gray-300">Пример профессионального видео</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Inbox Modal -->
-    <div id="inbox-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div class="card rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-hidden">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold">Входящие сообщения</h3>
-                <button id="close-inbox" class="p-2 text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div id="inbox-messages" class="overflow-y-auto max-h-[60vh] pr-2">
-                <!-- Messages will be loaded here -->
-            </div>
-            <div class="mt-4">
-                <textarea id="inbox-reply" class="w-full p-2 border rounded text-black" rows="3" placeholder="Ответ пользователю..."></textarea>
-                <button id="send-reply" class="mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Отправить ответ</button>
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-b from-gray-900 to-black">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Готовы стать медийным экспертом?</h2>
+                <p class="text-xl text-gray-300 mb-8">
+                    Запишитесь на бесплатную консультацию прямо сейчас, и я лично разберу ваш кейс
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="tel:9773818978" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-8 rounded-full transition flex items-center justify-center glow-effect">
+                        <i class="fas fa-phone-alt mr-2"></i> 977 381-89-78
+                    </a>
+                    <a href="https://t.me/MiRONproducer" target="_blank" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-full transition flex items-center justify-center border border-gray-700">
+                        <i class="fab fa-telegram-plane mr-2"></i> @MiRONproducer
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Footer -->
+    <footer id="contact" class="bg-black py-12 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-microphone text-2xl text-pink-500"></i>
+                        <span class="text-xl font-bold">MiRON<span class="gradient-text">producer</span></span>
+                    </div>
+                    <p class="text-gray-500 mt-2">Продюсер экспертов в социальных сетях</p>
+                </div>
+                
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-lg font-bold mb-4">Контакты</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt text-pink-500 mr-2"></i>
+                            <a href="tel:9773818978" class="hover:text-pink-500 transition">977 381-89-78</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fab fa-telegram-plane text-blue-400 mr-2"></i>
+                            <a href="https://t.me/MiRONproducer" target="_blank" class="hover:text-blue-400 transition">@MiRONproducer</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="https://t.me/stichotomia/6" target="_blank" class="social-icon text-gray-400 hover:text-pink-500 text-xl">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="https://www.instagram.com/podcast_mirona?igsh=MXc2OWEydWt6MWxwcQ%3D%3D&utm_source=qr" target="_blank" class="social-icon text-gray-400 hover:text-pink-500 text-xl">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
+                <p>© 2025 Владимир Мирончук. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
-        // Локальное хранилище для пользователей и разработчика
-        const usersDB = JSON.parse(localStorage.getItem('usersDB')) || {};
-        const devDB = JSON.parse(localStorage.getItem('devDB')) || { inbox: [] };
-        const DEV_PASSWORD = "78";
-        
-        // Текущий пользователь
-        let currentUser = null;
-        let currentDay = 1;
-        let isDevMode = false;
-        
-        // Мотивационные тексты для каждого дня
-        const motivationTexts = [
-            "Первый день - самый сложный. Помни, что каждый великий путь начинается с первого шага.",
-            "Твой мозг уже начинает восстанавливаться. Продолжай в том же духе!",
-            "После 3 дней воздержания уровень тестостерона начинает расти.",
-            "Через 4 дня уменьшается тревожность и улучшается сон.",
-            "5 дней без порно - и твоя концентрация уже заметно улучшилась.",
-            "Неделя без мастурбации - ты уже чувствуешь прилив энергии?",
-            "7 дней - отличный результат! Твой дофаминовый баланс восстанавливается.",
-            "После 8 дней улучшается качество эрекции и либидо.",
-            "9 дней - твоя уверенность в себе растет с каждым днем.",
-            "Десятый день! Ты уже на трети пути к 30-дневному челленджу.",
-            "11 дней - твой мозг продолжает перестраиваться на здоровые источники удовольствия.",
-            "Две недели без порно - ты замечаешь, как изменилось твое восприятие женщин?",
-            "15 дней - критический момент. Не сдавайся сейчас!",
-            "После 16 дней воздержания многие отмечают повышение творческих способностей.",
-            "17 дней - твоя сила воли становится сильнее с каждым днем.",
-            "18 дней - ты уже преодолел больше половины пути!",
-            "19 дней - твоя энергия продолжает расти. Используй ее продуктивно!",
-            "20 дней - ты уже близок к финишу. Не останавливайся!",
-            "21 день - столько времени нужно, чтобы сформировать новую привычку.",
-            "22 дня - твой мозг почти полностью перестроился.",
-            "23 дня - ты уже чувствуешь себя другим человеком?",
-            "24 дня - осталось совсем немного до полного месяца!",
-            "25 дней - твоя дисциплина впечатляет. Так держать!",
-            "26 дней - ты уже почти у цели. Не сдавайся сейчас!",
-            "27 дней - последний рывок! Ты сможешь!",
-            "28 дней - всего 3 дня осталось до полного месяца!",
-            "29 дней - ты почти у цели. Гордись собой!",
-            "30 дней - это огромное достижение! Ты доказал себе, что можешь все!",
-            "31 день - полный месяц без порно и мастурбации. Ты настоящий воин!"
-        ];
-
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            // Устанавливаем темную тему по умолчанию
-            localStorage.setItem('theme', 'dark');
-
-            // Инициализация кнопок
-            initButtons();
-            
-            // Проверяем, есть ли активный пользователь
-            const activeUser = localStorage.getItem('activeUser');
-            if (activeUser) {
-                currentUser = activeUser;
-                loadUserPanel();
-            }
-            
-            // Проверяем, есть ли активный разработчик
-            const activeDev = localStorage.getItem('activeDev');
-            if (activeDev === 'true') {
-                isDevMode = true;
-                loadDevPanel();
-            }
+        // Mobile menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
         });
-
-        // Инициализация всех кнопок и событий
-        function initButtons() {
-            // User messages buttons
-            document.getElementById('messages-toggle')?.addEventListener('click', showUserMessages);
-            document.getElementById('close-user-messages')?.addEventListener('click', hideUserMessages);
-            document.getElementById('send-user-message')?.addEventListener('click', sendUserMessage);
-            
-            // Inbox buttons
-            document.getElementById('inbox-btn')?.addEventListener('click', showInbox);
-            document.getElementById('close-inbox')?.addEventListener('click', hideInbox);
-            document.getElementById('send-reply')?.addEventListener('click', sendReply);
-            // Главный экран
-            document.getElementById('login-btn').addEventListener('click', showLoginForm);
-            document.getElementById('register-btn').addEventListener('click', showRegisterForm);
-            document.getElementById('dev-btn').addEventListener('click', showDevLogin);
-            
-            // Форма входа
-            document.getElementById('login-submit').addEventListener('click', loginUser);
-            document.getElementById('login-cancel').addEventListener('click', hideLoginForm);
-            
-            // Форма регистрации
-            document.getElementById('register-submit').addEventListener('click', registerUser);
-            document.getElementById('register-cancel').addEventListener('click', hideRegisterForm);
-            
-            // Вход разработчика
-            document.getElementById('dev-submit').addEventListener('click', loginDev);
-            document.getElementById('dev-cancel').addEventListener('click', hideDevLogin);
-            
-            // Панель пользователя
-            document.getElementById('logout-btn').addEventListener('click', logoutUser);
-            document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
-            document.getElementById('success-btn').addEventListener('click', markDayAsSuccess);
-            document.getElementById('fail-btn').addEventListener('click', markDayAsFail);
-            document.getElementById('save-day').addEventListener('click', saveDay);
-            document.getElementById('send-message').addEventListener('click', sendUserMessage);
-            
-            // Панель разработчика
-            document.getElementById('dev-logout').addEventListener('click', logoutDev);
-            document.getElementById('theme-toggle-dev').addEventListener('click', toggleTheme);
-            document.getElementById('user-search').addEventListener('input', searchUsers);
-            document.getElementById('dev-send-message').addEventListener('click', sendDevMessage);
-        }
-
-        // Показать/скрыть формы
-        function showLoginForm() {
-            document.getElementById('login-form').classList.remove('hidden');
-        }
-
-        function hideLoginForm() {
-            document.getElementById('login-form').classList.add('hidden');
-        }
-
-        function showRegisterForm() {
-            document.getElementById('register-form').classList.remove('hidden');
-        }
-
-        function hideRegisterForm() {
-            document.getElementById('register-form').classList.add('hidden');
-        }
-
-        function showDevLogin() {
-            document.getElementById('dev-login').classList.remove('hidden');
-        }
-
-        function hideDevLogin() {
-            document.getElementById('dev-login').classList.add('hidden');
-        }
-
-        // Вход пользователя
-        function loginUser() {
-            const username = document.getElementById('login-username').value.trim();
-            const password = document.getElementById('login-password').value.trim();
-            
-            if (!username || !password) {
-                alert('Пожалуйста, заполните все поля');
-                return;
-            }
-            
-            if (!usersDB[username]) {
-                alert('Пользователь не найден');
-                return;
-            }
-            
-            if (usersDB[username].password !== password) {
-                alert('Неверный пароль');
-                return;
-            }
-            
-            currentUser = username;
-            localStorage.setItem('activeUser', username);
-            hideLoginForm();
-            loadUserPanel();
-        }
-
-        // Регистрация пользователя
-        function registerUser() {
-            const username = document.getElementById('register-username').value.trim();
-            const password = document.getElementById('register-password').value.trim();
-            const confirm = document.getElementById('register-confirm').value.trim();
-            
-            if (!username || !password || !confirm) {
-                alert('Пожалуйста, заполните все поля');
-                return;
-            }
-            
-            if (password !== confirm) {
-                alert('Пароли не совпадают');
-                return;
-            }
-            
-            if (usersDB[username]) {
-                alert('Пользователь с таким именем уже существует');
-                return;
-            }
-            
-            // Создаем нового пользователя
-            usersDB[username] = {
-                password: password,
-                stats: {
-                    successDays: 0,
-                    failDays: 0,
-                    currentStreak: 0,
-                    longestStreak: 0
-                },
-                days: {},
-                messages: [],
-                energyHistory: [],
-                moodHistory: [],
-                registrationDate: new Date().toISOString(),
-                lastActivity: new Date().toISOString()
-            };
-            
-            // Сохраняем в локальное хранилище
-            localStorage.setItem('usersDB', JSON.stringify(usersDB));
-            
-            alert('Регистрация успешна! Теперь вы можете войти.');
-            hideRegisterForm();
-        }
-
-        // Вход разработчика
-        function loginDev() {
-            const password = document.getElementById('dev-password').value.trim();
-            
-            if (password !== DEV_PASSWORD) {
-                alert('Неверный пароль разработчика');
-                return;
-            }
-            
-            isDevMode = true;
-            localStorage.setItem('activeDev', 'true');
-            hideDevLogin();
-            loadDevPanel();
-        }
-
-        // Выход пользователя
-        function logoutUser() {
-            currentUser = null;
-            localStorage.removeItem('activeUser');
-            document.getElementById('user-panel').classList.add('hidden');
-            document.getElementById('main-screen').classList.remove('hidden');
-        }
-
-        // Выход разработчика
-        function logoutDev() {
-            isDevMode = false;
-            localStorage.removeItem('activeDev');
-            document.getElementById('dev-panel').classList.add('hidden');
-            document.getElementById('main-screen').classList.remove('hidden');
-        }
-
-        // Загрузка панели пользователя
-        function loadUserPanel() {
-            document.getElementById('main-screen').classList.add('hidden');
-            document.getElementById('user-panel').classList.remove('hidden');
-            
-            const user = usersDB[currentUser];
-            
-            // Приветствие и статистика
-            document.getElementById('user-greeting').textContent = `Привет, ${currentUser}!`;
-            document.getElementById('user-stats').innerHTML = `
-                Успешных дней: <span class="text-green-500">${user.stats.successDays}</span> |
-                Срывов: <span class="text-red-500">${user.stats.failDays}</span> |
-                Текущий день: <span class="text-blue-500">${user.stats.currentStreak}</span>
-            `;
-            
-            // Определяем текущий день
-            const lastDay = Math.max(...Object.keys(user.days).map(Number).filter(Number.isInteger), 0);
-            currentDay = lastDay < 31 ? lastDay + 1 : 31;
-            
-            // Если день уже был начат, загружаем данные
-            if (user.days[currentDay]) {
-                document.getElementById('energy-level').value = user.days[currentDay].energy || 5;
-                document.getElementById('mood-level').value = user.days[currentDay].mood || 5;
-                document.getElementById('daily-notes').value = user.days[currentDay].notes || '';
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
                 
-                if (user.days[currentDay].status === 'success') {
-                    document.getElementById('success-btn').classList.add('bg-green-700');
-                } else if (user.days[currentDay].status === 'fail') {
-                    document.getElementById('fail-btn').classList.add('bg-red-700');
-                }
-            }
-            
-            document.getElementById('current-day').textContent = currentDay;
-            document.getElementById('motivation-text').textContent = motivationTexts[currentDay - 1] || motivationTexts[motivationTexts.length - 1];
-            
-            // Обновляем статистику
-            updateUserStats();
-            
-            // Загружаем сообщения
-            loadUserMessages();
-            
-            // Загружаем историю
-            loadUserHistory();
-        }
-
-        // Обновить счетчик сообщений
-        function updateInboxBadge() {
-            const badge = document.getElementById('inbox-badge');
-            const unreadCount = devDB.inbox.length;
-            
-            if (unreadCount > 0) {
-                badge.classList.remove('hidden');
-                badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
-            } else {
-                badge.classList.add('hidden');
-            }
-        }
-
-        // Загрузка панели разработчика
-        function loadDevPanel() {
-            document.getElementById('main-screen').classList.add('hidden');
-            document.getElementById('dev-panel').classList.remove('hidden');
-            
-            // Загружаем список пользователей
-            loadUsersList();
-            
-            // Обновляем счетчик сообщений
-            updateInboxBadge();
-        }
-
-        // Обновить счетчик сообщений
-        function updateInboxBadge() {
-            const badge = document.getElementById('inbox-badge');
-            const unreadCount = devDB.inbox.length;
-            
-            if (unreadCount > 0) {
-                badge.classList.remove('hidden');
-                badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
-            } else {
-                badge.classList.add('hidden');
-            }
-        }
-
-        // Загрузка списка пользователей
-        function loadUsersList() {
-            const usersList = document.getElementById('users-list');
-            usersList.innerHTML = '';
-            
-            for (const username in usersDB) {
-                const user = usersDB[username];
-                const userElement = document.createElement('div');
-                userElement.className = 'p-3 border-b cursor-pointer hover:bg-gray-700';
-                userElement.innerHTML = `
-                    <div class="font-semibold">${username}</div>
-                    <div class="text-sm">
-                        Успешных дней: ${user.stats.successDays} | 
-                        Срывов: ${user.stats.failDays} | 
-                        Серия: ${user.stats.currentStreak}
-                    </div>
-                `;
-                userElement.addEventListener('click', () => showUserData(username));
-                usersList.appendChild(userElement);
-            }
-        }
-
-        // Поиск пользователей
-        function searchUsers() {
-            const searchTerm = document.getElementById('user-search').value.toLowerCase();
-            const users = document.querySelectorAll('#users-list > div');
-            
-            users.forEach(user => {
-                const username = user.querySelector('.font-semibold').textContent.toLowerCase();
-                if (username.includes(searchTerm)) {
-                    user.classList.remove('hidden');
-                } else {
-                    user.classList.add('hidden');
-                }
-            });
-        }
-
-        // Показать данные пользователя (для разработчика)
-        function showUserData(username) {
-            const user = usersDB[username];
-            const container = document.getElementById('user-data-container');
-            
-            document.getElementById('selected-user-info').innerHTML = `
-                <div class="font-semibold">${username}</div>
-                <div class="text-sm mb-2">Зарегистрирован: ${new Date(user.registrationDate || Date.now()).toLocaleDateString()}</div>
-                <div class="text-sm">Последняя активность: ${user.lastActivity ? new Date(user.lastActivity).toLocaleString() : 'Нет данных'}</div>
-            `;
-            
-            // Статистика
-            document.getElementById('dev-user-stats').innerHTML = `
-                <div>Успешных дней: ${user.stats.successDays}</div>
-                <div>Срывов: ${user.stats.failDays}</div>
-                <div>Текущая серия: ${user.stats.currentStreak}</div>
-                <div>Лучшая серия: ${user.stats.longestStreak}</div>
-                <div class="mt-2">
-                    <div class="w-full bg-gray-300 rounded-full h-2.5 dark:bg-gray-700">
-                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: ${Math.round((user.stats.successDays / (user.stats.successDays + user.stats.failDays || 1)) * 100)}%"></div>
-                    </div>
-                    <div class="text-xs mt-1">Успех: ${Math.round((user.stats.successDays / (user.stats.successDays + user.stats.failDays || 1)) * 100)}%</div>
-                </div>
-            `;
-            
-            // История дней с более подробной информацией
-            const historyContainer = document.getElementById('dev-user-history');
-            historyContainer.innerHTML = '';
-            
-            const days = Object.keys(user.days).sort((a, b) => b - a);
-            days.forEach(day => {
-                const dayData = user.days[day];
-                const dayElement = document.createElement('div');
-                dayElement.className = 'p-2 border-b text-sm';
-                dayElement.innerHTML = `
-                    <div class="font-semibold">День ${day}: <span class="${dayData.status === 'success' ? 'text-green-500' : 'text-red-500'}">${dayData.status === 'success' ? 'Успех' : 'Срыв'}</span></div>
-                    <div>Энергия: ${dayData.energy}/10 | Настроение: ${dayData.mood}/10</div>
-                    <div class="text-xs text-gray-400">${dayData.notes || 'Нет заметок'}</div>
-                    <div class="text-xs text-gray-500 mt-1">${new Date(dayData.date).toLocaleString()}</div>
-                `;
-                historyContainer.appendChild(dayElement);
-            });
-            
-            container.classList.remove('hidden');
-        }
-
-        // Отметить день как успешный
-        function markDayAsSuccess() {
-            document.getElementById('success-btn').classList.add('bg-green-700');
-            document.getElementById('fail-btn').classList.remove('bg-red-700');
-        }
-
-        // Отметить день как срыв
-        function markDayAsFail() {
-            document.getElementById('fail-btn').classList.add('bg-red-700');
-            document.getElementById('success-btn').classList.remove('bg-green-700');
-        }
-
-        // Сохранить день
-        function saveDay() {
-            const user = usersDB[currentUser];
-            const energy = parseInt(document.getElementById('energy-level').value);
-            const mood = parseInt(document.getElementById('mood-level').value);
-            const notes = document.getElementById('daily-notes').value.trim();
-            
-            let status = null;
-            if (document.getElementById('success-btn').classList.contains('bg-green-700')) {
-                status = 'success';
-            } else if (document.getElementById('fail-btn').classList.contains('bg-red-700')) {
-                status = 'fail';
-            }
-            
-            if (!status) {
-                alert('Пожалуйста, отметьте, был ли сегодня успех или срыв');
-                return;
-            }
-            
-            // Сохраняем день
-            user.days[currentDay] = {
-                status: status,
-                energy: energy,
-                mood: mood,
-                notes: notes,
-                date: new Date().toISOString()
-            };
-            
-            // Обновляем статистику
-            if (status === 'success') {
-                user.stats.successDays++;
-                user.stats.currentStreak++;
-                if (user.stats.currentStreak > user.stats.longestStreak) {
-                    user.stats.longestStreak = user.stats.currentStreak;
-                }
-            } else {
-                user.stats.failDays++;
-                user.stats.currentStreak = 0;
-            }
-            
-            // Добавляем в историю энергии и настроения
-            user.energyHistory.push(energy);
-            user.moodHistory.push(mood);
-            
-            // Сохраняем в локальное хранилище
-            localStorage.setItem('usersDB', JSON.stringify(usersDB));
-            
-            // Обновляем интерфейс
-            updateUserStats();
-            loadUserHistory();
-            
-            // Переходим к следующему дню, если это не последний день
-            if (currentDay < 31) {
-                currentDay++;
-                document.getElementById('current-day').textContent = currentDay;
-                document.getElementById('motivation-text').textContent = motivationTexts[currentDay - 1] || motivationTexts[motivationTexts.length - 1];
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
                 
-                // Сбрасываем поля для нового дня
-                document.getElementById('energy-level').value = 5;
-                document.getElementById('mood-level').value = 5;
-                document.getElementById('daily-notes').value = '';
-                document.getElementById('success-btn').classList.remove('bg-green-700');
-                document.getElementById('fail-btn').classList.remove('bg-red-700');
-            } else {
-                alert('Поздравляем! Вы завершили 31-дневный челлендж!');
-            }
-        }
-
-        // Inbox functions
-        function showInbox() {
-            const inbox = document.getElementById('inbox-modal');
-            inbox.classList.remove('hidden');
-            loadInboxMessages();
-        }
-
-        function hideInbox() {
-            document.getElementById('inbox-modal').classList.add('hidden');
-        }
-
-        function loadInboxMessages() {
-            const container = document.getElementById('inbox-messages');
-            container.innerHTML = '';
-            
-            if (devDB.inbox.length === 0) {
-                container.innerHTML = '<div class="text-center py-4 text-gray-500">Нет новых сообщений</div>';
-                return;
-            }
-            
-            devDB.inbox.forEach((msg, index) => {
-                const msgElement = document.createElement('div');
-                msgElement.className = 'mb-4 p-3 rounded-lg bg-gray-700 bg-opacity-20';
-                msgElement.innerHTML = `
-                    <div class="font-semibold">От: ${msg.fromUsername}</div>
-                    <div class="text-sm mb-2">${msg.text}</div>
-                    <div class="text-xs text-gray-400">${new Date(msg.date).toLocaleString()}</div>
-                    <button data-index="${index}" class="reply-btn mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">
-                        Ответить
-                    </button>
-                `;
-                container.appendChild(msgElement);
-            });
-            
-            // Add reply button handlers
-            document.querySelectorAll('.reply-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const index = this.getAttribute('data-index');
-                    const msg = devDB.inbox[index];
-                    document.getElementById('inbox-reply').value = `@${msg.fromUsername} `;
-                });
-            });
-        }
-
-        function sendReply() {
-            const replyText = document.getElementById('inbox-reply').value.trim();
-            if (!replyText) {
-                alert('Введите текст ответа');
-                return;
-            }
-            
-            // Extract username if replying to specific message
-            let username = '';
-            if (replyText.startsWith('@')) {
-                username = replyText.split(' ')[0].substring(1);
-            }
-            
-            if (username && usersDB[username]) {
-                usersDB[username].messages.push({
-                    from: 'dev',
-                    text: replyText,
-                    date: new Date().toISOString()
-                });
-                localStorage.setItem('usersDB', JSON.stringify(usersDB));
-                alert('Ответ отправлен пользователю ' + username);
-            } else {
-                alert('Не удалось определить пользователя для ответа');
-                return;
-            }
-            
-            document.getElementById('inbox-reply').value = '';
-            hideInbox();
-        }
-
-        // Обновить статистику пользователя
-        function updateUserStats() {
-            const user = usersDB[currentUser];
-            
-            // Обновляем текст статистики
-            document.getElementById('user-stats').innerHTML = `
-                Успешных дней: <span class="text-green-500">${user.stats.successDays}</span> |
-                Срывов: <span class="text-red-500">${user.stats.failDays}</span> |
-                Текущая серия: <span class="text-blue-500">${user.stats.currentStreak}</span>
-            `;
-            
-            // Прогресс бар
-            const progress = (currentDay - 1) / 31 * 100;
-            document.getElementById('progress-bar').style.width = `${progress}%`;
-            document.getElementById('progress-text').textContent = `${Math.round(progress)}% завершено`;
-            
-            // Средние значения
-            if (user.energyHistory.length > 0) {
-                const avgEnergy = (user.energyHistory.reduce((a, b) => a + b, 0) / user.energyHistory.length).toFixed(1);
-                document.getElementById('avg-energy').textContent = avgEnergy;
-            }
-            
-            if (user.moodHistory.length > 0) {
-                const avgMood = (user.moodHistory.reduce((a, b) => a + b, 0) / user.moodHistory.length).toFixed(1);
-                document.getElementById('avg-mood').textContent = avgMood;
-            }
-            
-            // Графики
-            updateCharts();
-        }
-
-        // Обновить графики
-        function updateCharts() {
-            const user = usersDB[currentUser];
-            
-            // График энергии
-            const energyCtx = document.getElementById('energy-chart').getContext('2d');
-            if (window.energyChart) {
-                window.energyChart.destroy();
-            }
-            window.energyChart = new Chart(energyCtx, {
-                type: 'line',
-                data: {
-                    labels: Array.from({length: user.energyHistory.length}, (_, i) => i + 1),
-                    datasets: [{
-                        label: 'Энергия',
-                        data: user.energyHistory,
-                        borderColor: 'rgb(59, 130, 246)',
-                        tension: 0.1,
-                        fill: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            min: 1,
-                            max: 10
-                        }
+                if (targetElement) {
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
                     }
+                    
+                    // Scroll to target
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
                 }
             });
-            
-            // График настроения
-            const moodCtx = document.getElementById('mood-chart').getContext('2d');
-            if (window.moodChart) {
-                window.moodChart.destroy();
-            }
-            window.moodChart = new Chart(moodCtx, {
-                type: 'line',
-                data: {
-                    labels: Array.from({length: user.moodHistory.length}, (_, i) => i + 1),
-                    datasets: [{
-                        label: 'Настроение',
-                        data: user.moodHistory,
-                        borderColor: 'rgb(16, 185, 129)',
-                        tension: 0.1,
-                        fill: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            min: 1,
-                            max: 10
-                        }
-                    }
-                }
-            });
-        }
-
-        // Show/hide user messages modal
-        function showUserMessages() {
-            document.getElementById('user-messages-modal').classList.remove('hidden');
-            loadUserMessages();
-        }
-
-        function hideUserMessages() {
-            document.getElementById('user-messages-modal').classList.add('hidden');
-        }
-
-        // Загрузить сообщения пользователя
-        function loadUserMessages() {
-            const user = usersDB[currentUser];
-            const container = document.getElementById('user-messages-container');
-            container.innerHTML = '';
-            
-            if (user.messages.length === 0) {
-                container.innerHTML = '<div class="text-center text-gray-500 py-4">Нет сообщений</div>';
-                return;
-            }
-            
-            user.messages.forEach(msg => {
-                const msgElement = document.createElement('div');
-                msgElement.className = 'mb-3 p-3 rounded-lg';
-                if (msg.from === 'dev') {
-                    msgElement.classList.add('bg-blue-900', 'bg-opacity-30');
-                    msgElement.innerHTML = `
-                        <div class="text-xs text-blue-400 mb-1">От разработчика</div>
-                        <div>${msg.text}</div>
-                        <div class="text-xs text-gray-500 mt-1">${new Date(msg.date).toLocaleString()}</div>
-                    `;
-                } else {
-                    msgElement.classList.add('bg-gray-700', 'bg-opacity-30');
-                    msgElement.innerHTML = `
-                        <div class="text-xs text-gray-400 mb-1">Вы</div>
-                        <div>${msg.text}</div>
-                        <div class="text-xs text-gray-500 mt-1">${new Date(msg.date).toLocaleString()}</div>
-                    `;
-                }
-                container.appendChild(msgElement);
-            });
-        }
-
-        // Загрузить историю пользователя
-        function loadUserHistory() {
-            const user = usersDB[currentUser];
-            const container = document.getElementById('history-container');
-            container.innerHTML = '';
-            
-            const days = Object.keys(user.days).sort((a, b) => b - a);
-            if (days.length === 0) {
-                container.innerHTML = '<div class="text-center text-gray-500 py-4">Нет истории</div>';
-                return;
-            }
-            
-            days.forEach(day => {
-                const dayData = user.days[day];
-                const dayElement = document.createElement('div');
-                dayElement.className = 'mb-3 p-3 rounded-lg bg-gray-700 bg-opacity-20';
-                dayElement.innerHTML = `
-                    <div class="font-semibold">День ${day}: <span class="${dayData.status === 'success' ? 'text-green-500' : 'text-red-500'}">${dayData.status === 'success' ? 'Успех' : 'Срыв'}</span></div>
-                    <div class="text-sm">Энергия: ${dayData.energy}/10 | Настроение: ${dayData.mood}/10</div>
-                    <div class="text-xs text-gray-400 mt-1">${dayData.notes || 'Нет заметок'}</div>
-                    <div class="text-xs text-gray-500 mt-1">${new Date(dayData.date).toLocaleDateString()}</div>
-                `;
-                container.appendChild(dayElement);
-            });
-        }
-
-        // Отправить сообщение от пользователя
-        function sendUserMessage() {
-            const text = document.getElementById('user-message-input').value.trim();
-            if (!text) {
-                alert('Пожалуйста, введите текст сообщения');
-                return;
-            }
-            
-            const user = usersDB[currentUser];
-            const userMessage = {
-                from: 'user',
-                fromUsername: currentUser,
-                text: text,
-                date: new Date().toISOString()
-            };
-            
-            // Сохраняем у пользователя
-            user.messages.push(userMessage);
-            localStorage.setItem('usersDB', JSON.stringify(usersDB));
-            
-            // Отправляем разработчику
-            devDB.inbox.push(userMessage);
-            localStorage.setItem('devDB', JSON.stringify(devDB));
-            
-            document.getElementById('user-message-input').value = '';
-            loadUserMessages();
-            
-            // Show success message
-            const successMsg = document.createElement('div');
-            successMsg.className = 'text-green-500 text-sm mt-2';
-            successMsg.textContent = 'Сообщение отправлено';
-            document.getElementById('user-messages-container').appendChild(successMsg);
-            setTimeout(() => successMsg.remove(), 3000);
-            
-            // Обновляем бейдж, если разработчик в системе
-            if (isDevMode) {
-                updateInboxBadge();
-            }
-        }
-
-        // Показать/скрыть inbox
-        function showInbox() {
-            const inbox = document.getElementById('inbox-modal');
-            inbox.classList.remove('hidden');
-            loadInboxMessages();
-        }
-
-        function hideInbox() {
-            document.getElementById('inbox-modal').classList.add('hidden');
-        }
-
-        // Загрузить сообщения в inbox
-        function loadInboxMessages() {
-            const container = document.getElementById('inbox-messages');
-            container.innerHTML = '';
-            
-            if (devDB.inbox.length === 0) {
-                container.innerHTML = '<div class="text-center py-4 text-gray-500">Нет новых сообщений</div>';
-                return;
-            }
-            
-            devDB.inbox.forEach((msg, index) => {
-                const msgElement = document.createElement('div');
-                msgElement.className = 'mb-4 p-3 rounded-lg bg-gray-700 bg-opacity-20';
-                msgElement.innerHTML = `
-                    <div class="font-semibold">От: ${msg.fromUsername}</div>
-                    <div class="text-sm mb-2">${msg.text}</div>
-                    <div class="text-xs text-gray-400">${new Date(msg.date).toLocaleString()}</div>
-                    <button data-index="${index}" class="reply-btn mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">
-                        Ответить
-                    </button>
-                `;
-                container.appendChild(msgElement);
-            });
-            
-            // Add reply button handlers
-            document.querySelectorAll('.reply-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const index = this.getAttribute('data-index');
-                    const msg = devDB.inbox[index];
-                    document.getElementById('inbox-reply').value = `@${msg.fromUsername} `;
-                });
-            });
-        }
-
-        // Отправить ответ из inbox
-        function sendReply() {
-            const replyText = document.getElementById('inbox-reply').value.trim();
-            if (!replyText) {
-                alert('Введите текст ответа');
-                return;
-            }
-            
-            // Extract username if replying to specific message
-            let username = '';
-            if (replyText.startsWith('@')) {
-                username = replyText.split(' ')[0].substring(1);
-            }
-            
-            if (username && usersDB[username]) {
-                usersDB[username].messages.push({
-                    from: 'dev',
-                    text: replyText,
-                    date: new Date().toISOString()
-                });
-                localStorage.setItem('usersDB', JSON.stringify(usersDB));
-                alert('Ответ отправлен пользователю ' + username);
-            } else {
-                alert('Не удалось определить пользователя для ответа');
-                return;
-            }
-            
-            document.getElementById('inbox-reply').value = '';
-            hideInbox();
-        }
-
-        // Отправить сообщение от разработчика
-        function sendDevMessage() {
-            const text = document.getElementById('dev-message').value.trim();
-            const selectedUser = document.querySelector('#users-list > div:not(.hidden)');
-            
-            if (!selectedUser || !text) {
-                alert('Пожалуйста, выберите пользователя и введите текст сообщения');
-                return;
-            }
-            
-            const username = selectedUser.querySelector('.font-semibold').textContent;
-            const user = usersDB[username];
-            user.messages.push({
-                from: 'dev',
-                text: text,
-                date: new Date().toISOString()
-            });
-            
-            localStorage.setItem('usersDB', JSON.stringify(usersDB));
-            document.getElementById('dev-message').value = '';
-            showUserData(username);
-            
-            // Если пользователь сейчас активен, обновим его сообщения
-            if (currentUser === username && document.getElementById('user-panel').classList.contains('hidden') === false) {
-                loadUserMessages();
-            }
-        }
-
-        // Переключение темы
-        function toggleTheme() {
-            const themeToggle = document.getElementById('theme-toggle');
-            if (document.body.classList.contains('dark-theme')) {
-                document.body.classList.remove('dark-theme');
-                document.body.classList.add('light-theme');
-                localStorage.setItem('theme', 'light');
-                themeToggle.querySelector('.fa-sun').classList.add('hidden');
-                themeToggle.querySelector('.fa-moon').classList.remove('hidden');
-                themeToggle.classList.remove('bg-gray-700', 'hover:bg-gray-600');
-                themeToggle.classList.add('bg-gray-100', 'hover:bg-gray-200');
-            } else {
-                document.body.classList.remove('light-theme');
-                document.body.classList.add('dark-theme');
-                localStorage.setItem('theme', 'dark');
-                themeToggle.querySelector('.fa-moon').classList.add('hidden');
-                themeToggle.querySelector('.fa-sun').classList.remove('hidden');
-                themeToggle.classList.remove('bg-gray-100', 'hover:bg-gray-200');
-                themeToggle.classList.add('bg-gray-700', 'hover:bg-gray-600');
-            }
-        }
+        });
     </script>
 </body>
 </html>
